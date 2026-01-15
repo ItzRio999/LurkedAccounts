@@ -1,0 +1,370 @@
+{
+  "staff_activity": {
+    "1204144189541978163": {
+      "messages": 5,
+      "daily": {
+        "2025-12-27": 5
+      },
+      "weekly": {
+        "2025-W52": 5
+      },
+      "monthly": {
+        "2025-12": 5
+      },
+      "first_tracked": "2025-12-27T20:51:12.033Z",
+      "last_active": "2025-12-27T20:52:34.778Z",
+      "streak": 0,
+      "longest_streak": 0,
+      "achievements": [],
+      "milestones": []
+    },
+    "1222660230572277862": {
+      "messages": 0,
+      "daily": {},
+      "weekly": {},
+      "monthly": {},
+      "first_tracked": "2025-12-30T18:16:14.243Z",
+      "last_active": "2025-12-30T18:16:14.243Z",
+      "streak": 0,
+      "longest_streak": 0,
+      "achievements": [],
+      "milestones": [],
+      "ticket_ratings": [
+        {
+          "rating": 5,
+          "ticket_num": 8,
+          "date": "2025-12-30T18:16:14.243Z"
+        }
+      ],
+      "tickets_handled": 1
+    }
+  },
+  "boost_log": [],
+  "levels": {
+    "1241437713039753228": {
+      "xp": 30,
+      "level": 0,
+      "last_message": 1766868700768
+    },
+    "561965144557748236": {
+      "xp": 30,
+      "level": 0,
+      "last_message": 1766868737403
+    },
+    "1204144189541978163": {
+      "xp": 60,
+      "level": 0,
+      "last_message": 1768461968039
+    },
+    "1222660230572277862": {
+      "xp": 75,
+      "level": 0,
+      "last_message": 1767468531573
+    },
+    "1177398457837817868": {
+      "xp": 30,
+      "level": 0,
+      "last_message": 1767116458993
+    },
+    "837303581970792449": {
+      "xp": 15,
+      "level": 0,
+      "last_message": 1767116413886
+    }
+  },
+  "tickets": {},
+  "ticket_counter": 8,
+  "polls": {},
+  "message_cache": {
+    "1454577211481919549": {
+      "content": "bro.",
+      "author_id": "1241437713039753228",
+      "channel_id": "1451251795471896681",
+      "timestamp": 1766868631955
+    },
+    "1454577239491612832": {
+      "content": "dont say yall, i was playing music",
+      "author_id": "1241437713039753228",
+      "channel_id": "1451251795471896681",
+      "timestamp": 1766868638633
+    },
+    "1454577317757194312": {
+      "content": "whos yall",
+      "author_id": "561965144557748236",
+      "channel_id": "1451251795471896681",
+      "timestamp": 1766868657293
+    },
+    "1454577329954230505": {
+      "content": "theres only u 2 in the call",
+      "author_id": "561965144557748236",
+      "channel_id": "1451251795471896681",
+      "timestamp": 1766868660201
+    },
+    "1454577345599115337": {
+      "content": "its back on",
+      "author_id": "1204144189541978163",
+      "channel_id": "1451251795471896681",
+      "timestamp": 1766868663931
+    },
+    "1454577466189545494": {
+      "content": "yall (you guys that arent in vc thats fucking around with it)",
+      "author_id": "1241437713039753228",
+      "channel_id": "1451251795471896681",
+      "timestamp": 1766868692682
+    },
+    "1454577489329389710": {
+      "content": "!play https://www.youtube.com/watch?v=ot9zx0W0Z8w",
+      "author_id": "1241437713039753228",
+      "channel_id": "1451251795471896681",
+      "timestamp": 1766868698199
+    },
+    "1454577531414904993": {
+      "content": "i only said !skip !!!!!!!!!!!!",
+      "author_id": "561965144557748236",
+      "channel_id": "1451251795471896681",
+      "timestamp": 1766868708233
+    },
+    "1454577558317437064": {
+      "content": "!volume 50",
+      "author_id": "1204144189541978163",
+      "channel_id": "1451251795471896681",
+      "timestamp": 1766868714647
+    },
+    "1454577573727174686": {
+      "content": "bru",
+      "author_id": "1204144189541978163",
+      "channel_id": "1451251795471896681",
+      "timestamp": 1766868718321
+    },
+    "1454577591154507999": {
+      "content": "ik, you arent the holy one to the do it,",
+      "author_id": "1241437713039753228",
+      "channel_id": "1451251795471896681",
+      "timestamp": 1766868722476
+    },
+    "1454577619797540947": {
+      "content": "oh",
+      "author_id": "561965144557748236",
+      "channel_id": "1451251795471896681",
+      "timestamp": 1766868729305
+    },
+    "1454577623865884722": {
+      "content": "whoops",
+      "author_id": "561965144557748236",
+      "channel_id": "1451251795471896681",
+      "timestamp": 1766868730275
+    },
+    "1454577637073752136": {
+      "content": "its on n everything 😭",
+      "author_id": "1204144189541978163",
+      "channel_id": "1451251795471896681",
+      "timestamp": 1766868733424
+    },
+    "1454577692069593162": {
+      "content": "not a SINGLE error",
+      "author_id": "1204144189541978163",
+      "channel_id": "1451251795471896681",
+      "timestamp": 1766868746536
+    },
+    "1455615405195264212": {
+      "content": "better?",
+      "author_id": "1222660230572277862",
+      "channel_id": "1451251795471896681",
+      "timestamp": 1767116156625
+    },
+    "1455615473205903384": {
+      "content": "caps filter is disabled, spam filter enabled and adjusted",
+      "author_id": "1222660230572277862",
+      "channel_id": "1451251795471896681",
+      "timestamp": 1767116172840
+    },
+    "1455616320887328896": {
+      "content": "Wonderful, thank you. This is MUCH appreciated.",
+      "author_id": "1177398457837817868",
+      "channel_id": "1451251795471896681",
+      "timestamp": 1767116374943
+    },
+    "1455616406753382564": {
+      "content": "💀",
+      "author_id": "1222660230572277862",
+      "channel_id": "1451251795471896681",
+      "timestamp": 1767116395415
+    },
+    "1455616419914977490": {
+      "content": "Whattt",
+      "author_id": "1177398457837817868",
+      "channel_id": "1451251795471896681",
+      "timestamp": 1767116398553
+    },
+    "1455616421424795762": {
+      "content": "i love ts com",
+      "author_id": "1222660230572277862",
+      "channel_id": "1451251795471896681",
+      "timestamp": 1767116398913
+    },
+    "1455616446800466092": {
+      "content": "Same. I like it",
+      "author_id": "1177398457837817868",
+      "channel_id": "1451251795471896681",
+      "timestamp": 1767116404963
+    },
+    "1455616472138121349": {
+      "content": "Morning",
+      "author_id": "837303581970792449",
+      "channel_id": "1451251795471896681",
+      "timestamp": 1767116411004
+    },
+    "1455616503692001352": {
+      "content": "goodmorning honey bun",
+      "author_id": "1222660230572277862",
+      "channel_id": "1451251795471896681",
+      "timestamp": 1767116418527
+    },
+    "1455616507269611673": {
+      "content": "I used to code bots all the fun. Great fun! ... Until... its not",
+      "author_id": "1177398457837817868",
+      "channel_id": "1451251795471896681",
+      "timestamp": 1767116419380
+    },
+    "1455616549577822239": {
+      "content": "HEY!!!! What about me???",
+      "author_id": "1177398457837817868",
+      "channel_id": "1451251795471896681",
+      "timestamp": 1767116429467
+    },
+    "1455616661041184914": {
+      "content": "Imma go work on my game.",
+      "author_id": "1177398457837817868",
+      "channel_id": "1451251795471896681",
+      "timestamp": 1767116456042
+    },
+    "1455616684483149874": {
+      "content": "oh how could i forget ab my sugar!",
+      "author_id": "1222660230572277862",
+      "channel_id": "1451251795471896681",
+      "timestamp": 1767116461631
+    },
+    "1455616783942815794": {
+      "content": "Awww, aren't you my little sweetie pie",
+      "author_id": "1177398457837817868",
+      "channel_id": "1451251795471896681",
+      "timestamp": 1767116485344
+    },
+    "1455616860904100023": {
+      "content": "<a:JuiceFreeStyle:1455314888778842246>",
+      "author_id": "1222660230572277862",
+      "channel_id": "1451251795471896681",
+      "timestamp": 1767116503693
+    },
+    "1455637802178842674": {
+      "content": "fixedddd",
+      "author_id": "1222660230572277862",
+      "channel_id": "1455634979513176136",
+      "timestamp": 1767121496482
+    },
+    "1455637811393990688": {
+      "content": "i think...",
+      "author_id": "1222660230572277862",
+      "channel_id": "1455634979513176136",
+      "timestamp": 1767121498679
+    },
+    "1455637824295539042": {
+      "content": "prob fucking not",
+      "author_id": "1222660230572277862",
+      "channel_id": "1455634979513176136",
+      "timestamp": 1767121501755
+    },
+    "1457093338229506240": {
+      "content": "your good",
+      "author_id": "1222660230572277862",
+      "channel_id": "1451251795471896681",
+      "timestamp": 1767468523319
+    },
+    "1461258170835009608": {
+      "content": "vha",
+      "author_id": "1204144189541978163",
+      "channel_id": "1451251795471896681",
+      "timestamp": 1768461496791
+    },
+    "1461260153822249107": {
+      "content": "<@&1454515892078776360> dropping accs tmrw",
+      "author_id": "1204144189541978163",
+      "channel_id": "1451251795471896678",
+      "timestamp": 1768461969572
+    }
+  },
+  "closed_tickets": [
+    {
+      "ticket_num": 8,
+      "user_id": "1222660230572277862",
+      "user_tag": "b4byr1o",
+      "category": "Account",
+      "created_at": "2025-12-30T18:15:36.802Z",
+      "claimed_by": "1222660230572277862",
+      "closed": true,
+      "messages": [],
+      "claimed_at": "2025-12-30T18:15:38.384Z",
+      "closed_by": "1222660230572277862",
+      "closed_at": "2025-12-30T18:15:46.609Z",
+      "rating": 5,
+      "feedback": "Rio is Quick WINK",
+      "staff_rating": 5,
+      "rated_at": "2025-12-30T18:16:14.243Z"
+    },
+    {
+      "ticket_num": 7,
+      "user_id": "1222660230572277862",
+      "user_tag": "b4byr1o",
+      "category": "Account",
+      "created_at": "2025-12-30T18:14:44.773Z",
+      "claimed_by": null,
+      "closed": true,
+      "messages": [],
+      "closed_by": "1222660230572277862",
+      "closed_at": "2025-12-30T18:14:52.076Z",
+      "rating": 5,
+      "feedback": "Nigga is him",
+      "staff_rating": null,
+      "rated_at": "2025-12-30T18:15:11.989Z"
+    },
+    {
+      "ticket_num": 6,
+      "user_id": "1222660230572277862",
+      "user_tag": "b4byr1o",
+      "category": "Account",
+      "created_at": "2025-12-30T18:13:08.922Z",
+      "claimed_by": "1222660230572277862",
+      "closed": true,
+      "messages": [],
+      "claimed_at": "2025-12-30T18:13:14.617Z",
+      "closed_by": "1222660230572277862",
+      "closed_at": "2025-12-30T18:13:25.737Z"
+    },
+    {
+      "ticket_num": 5,
+      "user_id": "1222660230572277862",
+      "user_tag": "b4byr1o",
+      "category": "general",
+      "created_at": "2025-12-30T18:02:59.548Z",
+      "claimed_by": null,
+      "closed": true,
+      "messages": [],
+      "closed_by": "1222660230572277862",
+      "closed_at": "2025-12-30T18:03:41.054Z",
+      "rating": 5,
+      "feedback": "Nigga RIO is him!",
+      "rated_at": "2025-12-30T18:04:16.488Z"
+    }
+  ],
+  "automod_strikes": {},
+  "discord_verifications": {
+    "1222660230572277862": {
+      "discordId": "1222660230572277862",
+      "websiteUserId": "bNTHMb3WdTPJMslntesklAFEO9c2",
+      "websiteEmail": "lilbluedevil07@gmail.com",
+      "verifiedAt": "2026-01-15T07:55:30.260Z",
+      "lastVerifiedAt": "2026-01-15T09:03:03.519Z",
+      "websiteUsername": "ItzRio"
+    }
+  }
+}
