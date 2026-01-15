@@ -1185,12 +1185,14 @@ class ApiServer {
     });
   }
 
-  start(port = 3001) {
-    this.server = this.app.listen(port, () => {
-      console.log(`🌐 API Server running on http://localhost:${port}`);
+  start(port = 3001, host = process.env.API_HOST || "0.0.0.0") {
+    this.server = this.app.listen(port, host, () => {
+      const publicUrl =
+        process.env.API_PUBLIC_URL ||
+        `http://${host === "0.0.0.0" ? "localhost" : host}:${port}`;
+      console.log(`dYO? API Server running on ${publicUrl}`);
     });
   }
-
   stop() {
     if (this.server) {
       this.server.close();
