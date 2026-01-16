@@ -6,7 +6,6 @@ const { loadJson, CONFIG_PATH, DATA_PATH } = require("./utils/fileManager");
 const { hasStaffRole } = require("./utils/permissions");
 const { handleInteraction } = require("./handlers/interactions");
 const commands = require("./handlers/commands");
-const ApiServer = require("./api/server");
 
 // Lazy-load feature modules (loaded on-demand for better memory efficiency on Pi)
 let ticketsModule, staffTrackingModule, boostTrackingModule;
@@ -101,9 +100,6 @@ async function registerCommands() {
 
 // ============== EVENT HANDLERS ==============
 
-// Initialize API Server
-let apiServer = null;
-
 client.on("clientReady", async () => {
   console.log(`✅ Logged in as ${client.user.tag}`);
   console.log(`📊 Serving ${client.guilds.cache.size} guild(s)`);
@@ -117,11 +113,6 @@ client.on("clientReady", async () => {
   } catch (error) {
     console.error('⚠️ Error fetching guild members:', error);
   }
-
-  // Start API server after bot is ready
-  apiServer = new ApiServer(client);
-  const apiPort = process.env.API_PORT || 3001;
-  apiServer.start(apiPort);
 
   // Enhanced rotating status messages with Rich Presence
   const statuses = [
@@ -309,9 +300,6 @@ process.on("unhandledRejection", (error) => {
 // Graceful shutdown
 process.on('SIGINT', () => {
   console.log('\n🛑 Shutting down...');
-  if (apiServer) {
-    apiServer.stop();
-  }
   client.destroy();
   process.exit(0);
 });
