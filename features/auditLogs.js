@@ -13,23 +13,23 @@ async function logMemberJoin(member, config) {
   const isNew = daysOld < 7;
 
   const embed = new EmbedBuilder()
-    .setTitle("📥 Member Joined")
+    .setTitle("Member Joined")
     .setDescription(`${mention(member.id)} ${member.user.tag}`)
     .addFields(
-      { name: "👤 User ID", value: member.id, inline: true },
+      { name: "User ID", value: member.id, inline: true },
       {
-        name: "📅 Account Created",
+        name: "Account Created",
         value: `<t:${Math.floor(member.user.createdTimestamp / 1000)}:R>`,
         inline: true,
       },
-      { name: "📊 Total Members", value: `${member.guild.memberCount}`, inline: true }
+      { name: "Total Members", value: `${member.guild.memberCount}`, inline: true }
     )
     .setColor(isNew ? 0xFEE75C : 0x57F287)
     .setThumbnail(member.user.displayAvatarURL({ size: 256 }))
     .setTimestamp();
 
   if (isNew) {
-    embed.setFooter({ text: "⚠️ Account is less than 7 days old" });
+    embed.setFooter({ text: "Account is less than 7 days old" });
   }
 
   await logChannel.send({ embeds: [embed] }).catch(console.error);
@@ -49,22 +49,22 @@ async function logMemberLeave(member, config) {
   const joinedTimestamp = member.joinedTimestamp ? Math.floor(member.joinedTimestamp / 1000) : null;
 
   const embed = new EmbedBuilder()
-    .setTitle("📤 Member Left")
+    .setTitle("Member Left")
     .setDescription(`${member.user.tag}`)
     .addFields(
-      { name: "👤 User ID", value: member.id, inline: true },
-      { name: "📊 Total Members", value: `${member.guild.memberCount}`, inline: true }
+      { name: "User ID", value: member.id, inline: true },
+      { name: "Total Members", value: `${member.guild.memberCount}`, inline: true }
     )
     .setColor(0xED4245)
     .setThumbnail(member.user.displayAvatarURL({ size: 256 }))
     .setTimestamp();
 
   if (joinedTimestamp) {
-    embed.addFields({ name: "📅 Joined", value: `<t:${joinedTimestamp}:R>`, inline: true });
+    embed.addFields({ name: "Joined", value: `<t:${joinedTimestamp}:R>`, inline: true });
   }
 
   if (roles !== "None") {
-    embed.addFields({ name: "🎭 Roles", value: roles.slice(0, 1024) });
+    embed.addFields({ name: "Roles", value: roles.slice(0, 1024) });
   }
 
   await logChannel.send({ embeds: [embed] }).catch(console.error);
@@ -82,7 +82,7 @@ async function logRoleUpdate(before, after, config) {
   if (!logChannel) return;
 
   const embed = new EmbedBuilder()
-    .setTitle("🎭 Member Roles Updated")
+    .setTitle("Member Roles Updated")
     .setDescription(`${mention(after.id)} ${after.user.tag}`)
     .setColor(0x5865F2)
     .setThumbnail(after.user.displayAvatarURL())
@@ -90,14 +90,14 @@ async function logRoleUpdate(before, after, config) {
 
   if (addedRoles.size > 0) {
     embed.addFields({
-      name: "✅ Added Roles",
+      name: "Added Roles",
       value: addedRoles.map((r) => r.name).join(", "),
     });
   }
 
   if (removedRoles.size > 0) {
     embed.addFields({
-      name: "❌ Removed Roles",
+      name: "Removed Roles",
       value: removedRoles.map((r) => r.name).join(", "),
     });
   }
@@ -116,10 +116,10 @@ async function logMessageDelete(message, config, data) {
   const content = message.content || messageData?.content || "*[Content not cached]*";
 
   const embed = new EmbedBuilder()
-    .setTitle("🗑️ Message Deleted")
+    .setTitle("Message Deleted")
     .setDescription(`**Channel:** ${message.channel}\n**Author:** ${message.author || "Unknown"}`)
     .addFields({
-      name: "💬 Content",
+      name: "Content",
       value: content.slice(0, 1024) || "*[No content]*",
     })
     .setColor(0xED4245)
@@ -134,7 +134,7 @@ async function logMessageDelete(message, config, data) {
 
   if (message.attachments.size > 0) {
     const attachments = message.attachments.map((a) => a.name).join(", ");
-    embed.addFields({ name: "📎 Attachments", value: attachments });
+    embed.addFields({ name: "Attachments", value: attachments });
   }
 
   await logChannel.send({ embeds: [embed] }).catch(console.error);
@@ -149,15 +149,15 @@ async function logMessageEdit(before, after, config) {
   if (!logChannel) return;
 
   const embed = new EmbedBuilder()
-    .setTitle("✏️ Message Edited")
+    .setTitle("Message Edited")
     .setDescription(`**Channel:** ${after.channel}\n**Author:** ${after.author}\n[Jump to Message](${after.url})`)
     .addFields(
       {
-        name: "📝 Before",
+        name: "Before",
         value: (before.content || "*[No content]*").slice(0, 1024),
       },
       {
-        name: "📝 After",
+        name: "After",
         value: (after.content || "*[No content]*").slice(0, 1024),
       }
     )

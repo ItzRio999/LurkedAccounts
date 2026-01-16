@@ -7,7 +7,7 @@ const {
   StringSelectMenuOptionBuilder,
   MessageFlags,
 } = require("discord.js");
-const { saveJson } = require("../utils/fileManager");
+const { saveJson, addLogo } = require("../utils/fileManager");
 
 // Set ticket priority
 async function setTicketPriority(interaction, data, dataPath) {
@@ -44,16 +44,12 @@ async function setTicketPriority(interaction, data, dataPath) {
 
   const embed = new EmbedBuilder()
     .setTitle("Priority Updated")
-    .setDescription(
-      `━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-      `Ticket priority has been set to **${priorityEmojis[priority]} ${priority.toUpperCase()}**`
-    )
+    .setDescription(`Ticket priority has been set to **${priorityEmojis[priority]} ${priority.toUpperCase()}**`)
     .addFields(
       { name: "Set By", value: `${interaction.user}`, inline: true },
       { name: "Priority", value: `${priorityEmojis[priority]} ${priority.toUpperCase()}`, inline: true }
     )
     .setColor(priorityColors[priority])
-    .setAuthor({ name: "Ticket Priority", iconURL: "https://cdn-icons-png.flaticon.com/512/5709/5709755.png" })
     .setTimestamp();
 
   await interaction.reply({ embeds: [embed] });
@@ -99,13 +95,12 @@ async function addTicketNote(interaction, data, dataPath) {
 
   const embed = new EmbedBuilder()
     .setTitle("Note Added")
-    .setDescription(`━━━━━━━━━━━━━━━━━━━━━━━━━\n${note}`)
+    .setDescription(note)
     .addFields(
       { name: "Added By", value: `${interaction.user}`, inline: true },
       { name: "Total Notes", value: `${ticket.notes.length}`, inline: true }
     )
     .setColor(0x5865F2)
-    .setAuthor({ name: "Staff Notes", iconURL: "https://cdn-icons-png.flaticon.com/512/2541/2541988.png" })
     .setTimestamp();
 
   await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
@@ -136,9 +131,8 @@ async function viewTicketNotes(interaction, data) {
 
   const embed = new EmbedBuilder()
     .setTitle("Ticket Notes")
-    .setDescription(`━━━━━━━━━━━━━━━━━━━━━━━━━\n${notesList}`)
+    .setDescription(notesList)
     .setColor(0x5865F2)
-    .setAuthor({ name: "Staff Notes", iconURL: "https://cdn-icons-png.flaticon.com/512/2541/2541988.png" })
     .setFooter({ text: `${ticket.notes.length} note${ticket.notes.length !== 1 ? 's' : ''}` })
     .setTimestamp();
 
@@ -157,22 +151,17 @@ async function requestTicketRating(channel, ticket, user, config) {
     );
 
     const embed = new EmbedBuilder()
-      .setTitle("⭐ Rate Your Support Experience")
-      .setDescription(
-        `━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-        `**Ticket #${String(ticket.ticket_num).padStart(4, '0')}** has been closed.\n\n` +
-        `Click the button below to rate your experience and optionally provide feedback!`
-      )
+      .setTitle("Rate Your Support Experience")
+      .setDescription(`Ticket #${String(ticket.ticket_num).padStart(4, '0')} has been closed. Click the button below to rate your experience.`)
       .addFields(
-        { name: "📋 Category", value: ticket.category || "General", inline: true },
-        { name: "⏱️ Response Time", value: ticket.claimed_by ? "Handled by staff" : "Unclaimed", inline: true }
+        { name: "Category", value: ticket.category || "General", inline: true },
+        { name: "Response Time", value: ticket.claimed_by ? "Handled by staff" : "Unclaimed", inline: true }
       )
       .setColor(0xFEE75C)
-      .setAuthor({ name: "Support Feedback", iconURL: "https://cdn-icons-png.flaticon.com/512/3588/3588257.png" })
-      .setFooter({ text: "Your feedback helps us improve our service!" })
+      .setFooter({ text: "Your feedback helps us improve" })
       .setTimestamp();
 
-    if (config.logo_url) embed.setThumbnail(config.logo_url);
+    addLogo(embed, config);
 
     await user.send({ embeds: [embed], components: [buttonRow] }).catch(() => {
       // If DM fails, send in channel
@@ -338,20 +327,18 @@ async function handleTicketRating(interaction, data, dataPath, config) {
   const ratingLabels = ["", "Poor", "Fair", "Good", "Great", "Excellent"];
 
   const embed = new EmbedBuilder()
-    .setTitle("✅ Thank You for Your Feedback!")
+    .setTitle("Thank You for Your Feedback")
     .setDescription(
-      `━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
       `**Ticket Rating:** ${stars} (${rating}/5 - ${ratingLabels[rating]})\n` +
       `${staffRating ? `**Staff Rating:** ${staffStars} (${staffRating}/5 - ${ratingLabels[staffRating]})\n` : ''}` +
       `${feedbackText ? `\n**Your Feedback:**\n${feedbackText}\n` : ''}` +
-      `\nYour feedback helps us improve our support service!`
+      `\nYour feedback helps us improve our support service.`
     )
     .setColor(0x57F287)
-    .setAuthor({ name: "Feedback Received", iconURL: "https://cdn-icons-png.flaticon.com/512/3588/3588257.png" })
-    .setFooter({ text: "Thank you for using our support system!" })
+    .setFooter({ text: "Thank you for using support" })
     .setTimestamp();
 
-  if (config.logo_url) embed.setThumbnail(config.logo_url);
+  addLogo(embed, config);
 
   await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
 
@@ -361,33 +348,31 @@ async function handleTicketRating(interaction, data, dataPath, config) {
     const ratingsChannel = interaction.client.channels.cache.get(ratingsChannelId);
     if (ratingsChannel) {
       const logEmbed = new EmbedBuilder()
-        .setTitle(`⭐ Support Rating - Ticket #${String(ticket.ticket_num).padStart(4, '0')}`)
-        .setDescription(`━━━━━━━━━━━━━━━━━━━━━━━━━`)
+        .setTitle(`Support Rating - Ticket #${String(ticket.ticket_num).padStart(4, '0')}`)
         .addFields(
-          { name: "👤 User", value: `<@${ticket.user_id}>`, inline: true },
-          { name: "⭐ Ticket Rating", value: `${stars} (${rating}/5)`, inline: true },
-          { name: "📊 Quality", value: ratingLabels[rating], inline: true },
-          { name: "📋 Category", value: ticket.category || "General", inline: true },
-          { name: "✋ Handled By", value: ticket.claimed_by ? `<@${ticket.claimed_by}>` : "Unclaimed", inline: true },
-          { name: "📅 Rated", value: `<t:${Math.floor(Date.now() / 1000)}:R>`, inline: true }
+          { name: "User", value: `<@${ticket.user_id}>`, inline: true },
+          { name: "Ticket Rating", value: `${stars} (${rating}/5)`, inline: true },
+          { name: "Quality", value: ratingLabels[rating], inline: true },
+          { name: "Category", value: ticket.category || "General", inline: true },
+          { name: "Handled By", value: ticket.claimed_by ? `<@${ticket.claimed_by}>` : "Unclaimed", inline: true },
+          { name: "Rated", value: `<t:${Math.floor(Date.now() / 1000)}:R>`, inline: true }
         )
         .setColor(rating >= 4 ? 0x57F287 : rating >= 3 ? 0xFEE75C : 0xED4245)
-        .setAuthor({ name: "Ticket Feedback System", iconURL: "https://cdn-icons-png.flaticon.com/512/3588/3588257.png" })
         .setTimestamp();
 
       // Add staff rating if provided
       if (staffRating) {
-        logEmbed.addFields({ name: "👨‍💼 Staff Rating", value: `${staffStars} (${staffRating}/5 - ${ratingLabels[staffRating]})`, inline: false });
+        logEmbed.addFields({ name: "Staff Rating", value: `${staffStars} (${staffRating}/5 - ${ratingLabels[staffRating]})`, inline: false });
       }
 
       if (feedbackText) {
-        logEmbed.addFields({ name: "💬 Feedback", value: feedbackText, inline: false });
+        logEmbed.addFields({ name: "Feedback", value: feedbackText, inline: false });
         logEmbed.setFooter({ text: staffRating ? "Complete feedback with staff rating" : "Complete feedback received" });
       } else {
-        logEmbed.setFooter({ text: staffRating ? "Staff rating received" : "No written feedback provided" });
+        logEmbed.setFooter({ text: staffRating ? "Staff rating received" : "No written feedback" });
       }
 
-      if (config.logo_url) logEmbed.setThumbnail(config.logo_url);
+      addLogo(logEmbed, config);
 
       await ratingsChannel.send({ embeds: [logEmbed] });
     }
@@ -419,14 +404,12 @@ async function checkInactiveTickets(client, data, dataPath, config) {
         const embed = new EmbedBuilder()
           .setTitle("Ticket Auto-Closed")
           .setDescription(
-            `━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
             `This ticket has been automatically closed due to inactivity.\n\n` +
             `**Inactive for:** ${Math.floor(inactiveDuration / (1000 * 60 * 60))} hours\n` +
             `**Threshold:** ${inactivityThreshold} hours\n\n` +
             `Channel will be deleted in 10 seconds.`
           )
           .setColor(0xFEE75C)
-          .setAuthor({ name: "Auto-Close System", iconURL: "https://cdn-icons-png.flaticon.com/512/1828/1828479.png" })
           .setTimestamp();
 
         await channel.send({ embeds: [embed] });
@@ -468,16 +451,12 @@ async function toggleAutoClose(interaction, config, configPath) {
 
   const embed = new EmbedBuilder()
     .setTitle("Auto-Close Configuration")
-    .setDescription(
-      `━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-      `Auto-close has been **${enabled ? "enabled" : "disabled"}**.`
-    )
+    .setDescription(`Auto-close has been ${enabled ? "enabled" : "disabled"}.`)
     .addFields(
       { name: "Status", value: enabled ? "✅ Enabled" : "❌ Disabled", inline: true },
       { name: "Threshold", value: `${hours} hours`, inline: true }
     )
     .setColor(enabled ? 0x57F287 : 0xED4245)
-    .setAuthor({ name: "Ticket System", iconURL: "https://cdn-icons-png.flaticon.com/512/3126/3126647.png" })
     .setTimestamp();
 
   await interaction.reply({ embeds: [embed] });
@@ -515,23 +494,19 @@ async function viewTicketStats(interaction, data, config) {
 
   const embed = new EmbedBuilder()
     .setTitle("Ticket System Statistics")
-    .setDescription(`━━━━━━━━━━━━━━━━━━━━━━━━━`)
     .addFields(
-      { name: "📊 Total Tickets", value: `${totalTickets}`, inline: true },
-      { name: "🟢 Open", value: `${openTickets}`, inline: true },
-      { name: "🔒 Closed", value: `${closedTickets}`, inline: true },
-      { name: "\u200b", value: "━━━━━━━━━━━━━━━━━━━━━━━━━", inline: false },
-      { name: "⭐ Average Rating", value: `${avgRating}/5`, inline: true },
-      { name: "📝 Rated Tickets", value: `${ratedTickets.length}/${closedTickets}`, inline: true },
+      { name: "Total Tickets", value: `${totalTickets}`, inline: true },
+      { name: "Open", value: `${openTickets}`, inline: true },
+      { name: "Closed", value: `${closedTickets}`, inline: true },
+      { name: "Average Rating", value: `${avgRating}/5`, inline: true },
+      { name: "Rated Tickets", value: `${ratedTickets.length}/${closedTickets}`, inline: true },
       { name: "\u200b", value: "\u200b", inline: true },
-      { name: "\u200b", value: "━━━━━━━━━━━━━━━━━━━━━━━━━", inline: false },
       { name: "Priority Breakdown", value: `🔴 Urgent: ${priorities.urgent}\n🟠 High: ${priorities.high}\n🟡 Medium: ${priorities.medium}\n🟢 Low: ${priorities.low}\n⚪ None: ${priorities.none}`, inline: false }
     )
     .setColor(0x5865F2)
-    .setAuthor({ name: "Ticket Analytics", iconURL: "https://cdn-icons-png.flaticon.com/512/3050/3050155.png" })
     .setTimestamp();
 
-  if (config.logo_url) embed.setThumbnail(config.logo_url);
+  addLogo(embed, config);
 
   await interaction.reply({ embeds: [embed] });
 }
@@ -569,17 +544,13 @@ async function renameTicket(interaction, data, dataPath) {
 
     const embed = new EmbedBuilder()
       .setTitle("Ticket Renamed")
-      .setDescription(
-        `━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-        `Ticket channel has been renamed successfully.`
-      )
+      .setDescription("Ticket channel has been renamed successfully.")
       .addFields(
         { name: "Old Name", value: oldName, inline: true },
         { name: "New Name", value: finalName, inline: true },
         { name: "Renamed By", value: `${interaction.user}`, inline: false }
       )
       .setColor(0x57F287)
-      .setAuthor({ name: "Ticket Management", iconURL: "https://cdn-icons-png.flaticon.com/512/3126/3126647.png" })
       .setTimestamp();
 
     await interaction.reply({ embeds: [embed] });
@@ -601,22 +572,17 @@ async function setRatingsChannel(interaction, config, configPath) {
   saveJson(configPath, config);
 
   const embed = new EmbedBuilder()
-    .setTitle("✅ Ratings Channel Configured")
-    .setDescription(
-      `━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-      `Ticket ratings will now be sent to ${channel}.\n\n` +
-      `All future ticket feedback will appear in this channel with detailed information including optional written feedback.`
-    )
+    .setTitle("Ratings Channel Configured")
+    .setDescription(`Ticket ratings will now be sent to ${channel}. All future ticket feedback will appear in this channel with detailed information.`)
     .addFields(
-      { name: "📍 Channel", value: `${channel}`, inline: true },
-      { name: "🎯 Purpose", value: "Support ratings & feedback", inline: true }
+      { name: "Channel", value: `${channel}`, inline: true },
+      { name: "Purpose", value: "Support ratings & feedback", inline: true }
     )
     .setColor(0x57F287)
-    .setAuthor({ name: "Ticket Configuration", iconURL: "https://cdn-icons-png.flaticon.com/512/3126/3126647.png" })
     .setFooter({ text: "Users can submit ratings with optional feedback" })
     .setTimestamp();
 
-  if (config.logo_url) embed.setThumbnail(config.logo_url);
+  addLogo(embed, config);
 
   await interaction.reply({ embeds: [embed] });
 }
@@ -679,7 +645,7 @@ async function addUserToTicket(interaction, data, dataPath, config) {
 
     const embed = new EmbedBuilder()
       .setTitle("User Added")
-      .setDescription(`━━━━━━━━━━━━━━━━━━━━━━━━━\n✅ ${userToAdd} has been added to this ticket.`)
+      .setDescription(`✅ ${userToAdd} has been added to this ticket.`)
       .setColor(0x57F287)
       .setFooter({ text: `Added by ${interaction.user.tag}` })
       .setTimestamp();
@@ -748,7 +714,7 @@ async function removeUserFromTicket(interaction, data, dataPath, config) {
 
     const embed = new EmbedBuilder()
       .setTitle("User Removed")
-      .setDescription(`━━━━━━━━━━━━━━━━━━━━━━━━━\n✅ ${userToRemove} has been removed from this ticket.`)
+      .setDescription(`✅ ${userToRemove} has been removed from this ticket.`)
       .setColor(0x57F287)
       .setFooter({ text: `Removed by ${interaction.user.tag}` })
       .setTimestamp();
@@ -776,20 +742,20 @@ async function listTicketParticipants(interaction, data, dataPath) {
   }
 
   const creator = await interaction.client.users.fetch(ticket.user_id).catch(() => null);
-  let description = `━━━━━━━━━━━━━━━━━━━━━━━━━\n**👤 Ticket Creator**\n${creator ? `<@${ticket.user_id}>` : ticket.user_tag}\n\n`;
+  let description = `**Ticket Creator**\n${creator ? `<@${ticket.user_id}>` : ticket.user_tag}\n\n`;
 
   if (ticket.claimed_by) {
     const claimer = await interaction.client.users.fetch(ticket.claimed_by).catch(() => null);
-    description += `**🎫 Claimed By**\n${claimer ? `<@${ticket.claimed_by}>` : 'Unknown'}\n\n`;
+    description += `**Claimed By**\n${claimer ? `<@${ticket.claimed_by}>` : 'Unknown'}\n\n`;
   }
 
   if (ticket.added_users && ticket.added_users.length > 0) {
-    description += `**➕ Added Users (${ticket.added_users.length})**\n`;
+    description += `**Added Users (${ticket.added_users.length})**\n`;
     for (const userId of ticket.added_users) {
       description += `<@${userId}>\n`;
     }
   } else {
-    description += `**➕ Added Users**\nNone`;
+    description += `**Added Users**\nNone`;
   }
 
   const embed = new EmbedBuilder()

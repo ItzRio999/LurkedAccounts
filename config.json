@@ -19,8 +19,6 @@
     "1451251793303703620"
   ],
   "booster_role_id": "1356477545964372049",
-  "level_channel_id": null,
-  "level_roles": {},
   "ticket_category_id": "1453052282420596919",
   "ticket_log_channel_id": "1452862956961398805",
   "welcome_channel_id": null,
@@ -29,13 +27,13 @@
   "leave_message": null,
   "audit_log_channel_id": "1452862956961398805",
   "log_messages": true,
-  "logo_url": "https://i.imgur.com/LQYaL7w.jpeg",
+  "logo_url": "https://i.imgur.com/iBVFmni.png",
   "ticket_panel": {
     "title": "**Lurked Accounts Support**",
     "description": "Click one of the buttons below to open a support ticket, please try your best to match your problem with one of the options below for a quicker resonse.",
     "color": 16760025,
     "footer": "LurkedAccounts Support",
-    "thumbnail": "https://i.imgur.com/LQYaL7w.jpeg",
+    "thumbnail": "https://i.imgur.com/iBVFmni.png",
     "image": null,
     "buttons": [
       {

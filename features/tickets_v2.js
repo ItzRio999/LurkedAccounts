@@ -7,7 +7,7 @@ const {
   ChannelType,
   MessageFlags,
 } = require("discord.js");
-const { saveJson } = require("../utils/fileManager");
+const { saveJson, addLogo } = require("../utils/fileManager");
 
 // Default ticket panel configuration
 const DEFAULT_PANEL = {
@@ -64,15 +64,14 @@ async function createTicketPanel(interaction, config, configPath) {
 
   const embed = new EmbedBuilder()
     .setTitle(panel.title)
-    .setDescription(panel.description + "\n━━━━━━━━━━━━━━━━━━━━━━━━━")
+    .setDescription(panel.description)
     .setColor(panel.color)
-    .setAuthor({ name: "Support System", iconURL: "https://cdn-icons-png.flaticon.com/512/3126/3126647.png" })
     .setFooter({ text: panel.footer })
     .setTimestamp();
 
   if (panel.thumbnail) embed.setThumbnail(panel.thumbnail);
   if (panel.image) embed.setImage(panel.image);
-  if (config.logo_url) embed.setThumbnail(config.logo_url);
+  addLogo(embed, config);
 
   // Create button rows (max 5 buttons per row)
   const buttons = panel.buttons.map(btn =>
@@ -211,21 +210,17 @@ async function createTicketFromButton(interaction, category, config, data, dataP
 
     const embed = new EmbedBuilder()
       .setTitle(`Ticket #${String(ticketNum).padStart(4, '0')}`)
-      .setDescription(
-        `${interaction.user} - A staff member will assist you shortly.\n` +
-        `Please describe your issue below.\n━━━━━━━━━━━━━━━━━━━━━━━━━`
-      )
+      .setDescription(`${interaction.user} - A staff member will assist you shortly. Please describe your issue below.`)
       .addFields(
-        { name: "📋 Category", value: categoryName, inline: true },
-        { name: "🕒 Opened", value: `<t:${Math.floor(Date.parse(data.tickets[channel.id].created_at) / 1000)}:R>`, inline: true },
-        { name: "👤 User", value: `${interaction.user.tag}`, inline: true }
+        { name: "Category", value: categoryName, inline: true },
+        { name: "Opened", value: `<t:${Math.floor(Date.parse(data.tickets[channel.id].created_at) / 1000)}:R>`, inline: true },
+        { name: "User", value: `${interaction.user.tag}`, inline: true }
       )
       .setColor(0x5865F2)
-      .setAuthor({ name: "New Support Ticket", iconURL: "https://cdn-icons-png.flaticon.com/512/3126/3126647.png" })
       .setFooter({ text: "Use the buttons below to manage this ticket" })
       .setTimestamp();
 
-    if (config.logo_url) embed.setThumbnail(config.logo_url);
+    addLogo(embed, config);
 
     const row = new ActionRowBuilder().addComponents(
       new ButtonBuilder()
@@ -282,18 +277,15 @@ async function handleClaim(interaction, data, dataPath, config) {
 
   const embed = new EmbedBuilder()
     .setTitle("Ticket Claimed")
-    .setDescription(
-      `${interaction.user} has claimed this ticket and will provide support.\n━━━━━━━━━━━━━━━━━━━━━━━━━`
-    )
+    .setDescription(`${interaction.user} has claimed this ticket and will provide support.`)
     .addFields(
-      { name: "👤 Claimed By", value: `${interaction.user}`, inline: true },
-      { name: "🕒 Claimed", value: `<t:${Math.floor(Date.parse(ticket.claimed_at) / 1000)}:R>`, inline: true }
+      { name: "Claimed By", value: `${interaction.user}`, inline: true },
+      { name: "Claimed", value: `<t:${Math.floor(Date.parse(ticket.claimed_at) / 1000)}:R>`, inline: true }
     )
     .setColor(0x57F287)
-    .setAuthor({ name: "Ticket Update", iconURL: "https://cdn-icons-png.flaticon.com/512/5290/5290058.png" })
     .setTimestamp();
 
-  if (config.logo_url) embed.setThumbnail(config.logo_url);
+  addLogo(embed, config);
 
   await interaction.reply({ embeds: [embed] });
 }
@@ -304,18 +296,16 @@ async function handleClose(interaction, config, data, dataPath) {
 
   // Show confirmation dialog
   const confirmEmbed = new EmbedBuilder()
-    .setTitle("⚠️ Close Ticket Confirmation")
+    .setTitle("Close Ticket Confirmation")
     .setDescription(
-      "━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
       "Are you sure you want to close this ticket?\n\n" +
-      "**This will:**\n" +
+      "This will:\n" +
       "• Delete the channel permanently\n" +
       "• Send a transcript to the ticket creator\n" +
       "• Log the ticket in the ticket log channel\n\n" +
-      "**This action cannot be undone.**"
+      "This action cannot be undone."
     )
     .setColor(0xFEE75C)
-    .setAuthor({ name: "Ticket System", iconURL: "https://cdn-icons-png.flaticon.com/512/1828/1828479.png" })
     .setFooter({ text: `Ticket #${ticket.ticket_num}` })
     .setTimestamp();
 
@@ -343,15 +333,9 @@ async function handleCloseConfirm(interaction, config, data, dataPath) {
 
   const embed = new EmbedBuilder()
     .setTitle("Ticket Closing")
-    .setDescription(
-      "━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
-      "This ticket is being closed.\n\n" +
-      "**Channel will be deleted in 5 seconds.**\n" +
-      "Transcript will be sent to the ticket creator's DMs."
-    )
+    .setDescription("This ticket is being closed. Channel will be deleted in 5 seconds. Transcript will be sent to the ticket creator's DMs.")
     .setColor(0xFEE75C)
-    .setAuthor({ name: "Ticket System", iconURL: "https://cdn-icons-png.flaticon.com/512/1828/1828479.png" })
-    .setFooter({ text: "Thank you for using our support system" })
+    .setFooter({ text: "Thank you for contacting support" })
     .setTimestamp();
 
   // Update the original ephemeral message
@@ -441,27 +425,24 @@ async function closeTicket(channel, closedBy, config, data, dataPath) {
     const logChannel = channel.guild.channels.cache.get(config.ticket_log_channel_id);
     if (logChannel) {
       const embed = new EmbedBuilder()
-        .setTitle(`📋 Ticket Closed - #${String(ticket.ticket_num).padStart(4, '0')}`)
-        .setDescription(
-          `**User:** ${ticket.user_tag}\n**Category:** ${ticket.category}\n━━━━━━━━━━━━━━━━━━━━━━━━━`
-        )
+        .setTitle(`Ticket Closed - #${String(ticket.ticket_num).padStart(4, '0')}`)
+        .setDescription(`**User:** ${ticket.user_tag}\n**Category:** ${ticket.category}`)
         .addFields(
-          { name: "👤 User", value: `<@${ticket.user_id}>`, inline: true },
-          { name: "⏱️ Duration", value: duration, inline: true },
-          { name: "💬 Messages", value: `${messages.length}`, inline: true },
-          { name: "✋ Handled By", value: ticket.claimed_by ? `<@${ticket.claimed_by}>` : "Unclaimed", inline: true },
-          { name: "🔒 Closed By", value: `${closedBy}`, inline: true },
+          { name: "User", value: `<@${ticket.user_id}>`, inline: true },
+          { name: "Duration", value: duration, inline: true },
+          { name: "Messages", value: `${messages.length}`, inline: true },
+          { name: "Handled By", value: ticket.claimed_by ? `<@${ticket.claimed_by}>` : "Unclaimed", inline: true },
+          { name: "Closed By", value: `${closedBy}`, inline: true },
           { name: "\u200b", value: "\u200b", inline: true },
-          { name: "📅 Opened", value: `<t:${Math.floor(createdDate / 1000)}:R>`, inline: true },
-          { name: "📅 Closed", value: `<t:${Math.floor(closedDate / 1000)}:R>`, inline: true },
+          { name: "Opened", value: `<t:${Math.floor(createdDate / 1000)}:R>`, inline: true },
+          { name: "Closed", value: `<t:${Math.floor(closedDate / 1000)}:R>`, inline: true },
           { name: "\u200b", value: "\u200b", inline: true }
         )
         .setColor(0x5865F2)
-        .setAuthor({ name: "Ticket Log", iconURL: "https://cdn-icons-png.flaticon.com/512/3094/3094840.png" })
-        .setFooter({ text: "📄 HTML & TXT transcripts attached • Open .html in browser" })
+        .setFooter({ text: "HTML & TXT transcripts attached - Open .html in browser" })
         .setTimestamp();
 
-      if (config.logo_url) embed.setThumbnail(config.logo_url);
+      addLogo(embed, config);
 
       await logChannel.send({
         embeds: [embed],
@@ -479,22 +460,17 @@ async function closeTicket(channel, closedBy, config, data, dataPath) {
     user = await channel.client.users.fetch(ticket.user_id);
     const dmEmbed = new EmbedBuilder()
       .setTitle(`Ticket Closed - #${String(ticket.ticket_num).padStart(4, '0')}`)
-      .setDescription(
-        `Your ticket in **${channel.guild.name}** has been closed.\n` +
-        `━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-        `Your transcript is attached below for your records.`
-      )
+      .setDescription(`Your ticket in **${channel.guild.name}** has been closed. Your transcript is attached below for your records.`)
       .addFields(
-        { name: "⏱️ Duration", value: duration, inline: true },
-        { name: "💬 Messages", value: `${messages.length}`, inline: true },
-        { name: "✋ Handled By", value: closedBy.tag, inline: false }
+        { name: "Duration", value: duration, inline: true },
+        { name: "Messages", value: `${messages.length}`, inline: true },
+        { name: "Handled By", value: closedBy.tag, inline: false }
       )
       .setColor(0x57F287)
-      .setAuthor({ name: "Support Ticket", iconURL: "https://cdn-icons-png.flaticon.com/512/3126/3126647.png" })
       .setFooter({ text: "Thank you for contacting support" })
       .setTimestamp();
 
-    if (config.logo_url) dmEmbed.setThumbnail(config.logo_url);
+    addLogo(dmEmbed, config);
 
     await user.send({
       embeds: [dmEmbed],

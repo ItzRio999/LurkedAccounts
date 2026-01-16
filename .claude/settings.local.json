@@ -20,7 +20,11 @@
       "Bash(npm uninstall:*)",
       "Bash(git rebase:*)",
       "Bash(git add:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(if [ -f \"c:\\\\Users\\\\ItsRio''sPc\\\\Desktop\\\\lurked\\\\LurkedAccounts\\\\data.json\" ])",
+      "Bash(then echo \"exists\")",
+      "Bash(else echo \"not found\")",
+      "Bash(fi)"
     ]
   }
 }

@@ -35,15 +35,14 @@ async function startGiveaway(interaction, data, dataPath) {
   const embed = new EmbedBuilder()
     .setTitle(prize)
     .setDescription(
-      (description ? `${description}\n` : "") +
-      `━━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
-      `React with 🎉 to enter!\n\n` +
+      (description ? `${description}\n\n` : "") +
+      `React with 🎉 to enter\n\n` +
       `**Winners:** ${winners}\n` +
       `**Ends:** <t:${endTimestamp}:F> (<t:${endTimestamp}:R>)\n` +
       `**Hosted by:** ${interaction.user}`
     )
     .setColor(0xF59E42)
-    .setAuthor({ name: "🎉 GIVEAWAY 🎉", iconURL: "https://cdn-icons-png.flaticon.com/512/3227/3227447.png" })
+    .setAuthor({ name: "Giveaway", iconURL: "https://cdn-icons-png.flaticon.com/512/3227/3227447.png" })
     .setFooter({ text: `${winners} winner${winners !== 1 ? "s" : ""} | Ends` })
     .setTimestamp(endTime);
 
@@ -117,7 +116,7 @@ async function handleGiveawayButton(interaction, data, dataPath) {
     saveJson(dataPath, data);
 
     const embed = new EmbedBuilder()
-      .setDescription(`🎉 You entered the giveaway!\n**Total entries:** ${giveaway.entries.length}`)
+      .setDescription(`✅ You entered the giveaway\n**Total entries:** ${giveaway.entries.length}`)
       .setColor(0x57F287);
     return interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
   }
@@ -219,15 +218,12 @@ async function rerollGiveaway(interaction, data, dataPath) {
     const winnerMentions = winners.map(id => `<@${id}>`).join(", ");
 
     const rerollEmbed = new EmbedBuilder()
-      .setTitle("🎉 Giveaway Rerolled!")
+      .setTitle("Giveaway Rerolled")
       .setDescription(
-        `**Prize:** ${giveaway.prize}\n` +
-        `━━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
-        `**New Winner${winners.length !== 1 ? "s" : ""}:** ${winnerMentions}\n\n` +
-        `Congratulations!`
+        `**Prize:** ${giveaway.prize}\n\n` +
+        `**New Winner${winners.length !== 1 ? "s" : ""}:** ${winnerMentions}`
       )
       .setColor(0x57F287)
-      .setAuthor({ name: "Giveaway Reroll", iconURL: "https://cdn-icons-png.flaticon.com/512/3227/3227447.png" })
       .setTimestamp();
 
     await interaction.editReply({ content: winnerMentions, embeds: [rerollEmbed] });
@@ -279,15 +275,14 @@ async function finalizeGiveaway(message, giveaway, data, dataPath, client) {
   const endedEmbed = new EmbedBuilder()
     .setTitle(giveaway.prize)
     .setDescription(
-      (giveaway.description ? `${giveaway.description}\n` : "") +
-      `━━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
-      `**Giveaway Ended!**\n\n` +
+      (giveaway.description ? `${giveaway.description}\n\n` : "") +
+      `**Giveaway Ended**\n\n` +
       `**Winner${winners.length !== 1 ? "s" : ""}:** ${winnerMentions}\n` +
       `**Total Entries:** ${entries.length}\n` +
       `**Hosted by:** <@${giveaway.host_id}>`
     )
     .setColor(0x5865F2)
-    .setAuthor({ name: "🎉 GIVEAWAY ENDED 🎉", iconURL: "https://cdn-icons-png.flaticon.com/512/3227/3227447.png" })
+    .setAuthor({ name: "Giveaway Ended", iconURL: "https://cdn-icons-png.flaticon.com/512/3227/3227447.png" })
     .setFooter({ text: "Ended" })
     .setTimestamp();
 
@@ -298,27 +293,19 @@ async function finalizeGiveaway(message, giveaway, data, dataPath, client) {
   // Announce winners
   if (winners.length > 0) {
     const winnerEmbed = new EmbedBuilder()
-      .setTitle("🎉 Giveaway Winners!")
+      .setTitle("Giveaway Winners")
       .setDescription(
-        `**Prize:** ${giveaway.prize}\n` +
-        `━━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
-        `**Winner${winners.length !== 1 ? "s" : ""}:** ${winnerMentions}\n\n` +
-        `Congratulations! 🎊`
+        `**Prize:** ${giveaway.prize}\n\n` +
+        `**Winner${winners.length !== 1 ? "s" : ""}:** ${winnerMentions}`
       )
       .setColor(0x57F287)
-      .setImage("https://media.giphy.com/media/g9582DNuQppxC/giphy.gif") // Celebration GIF
-      .setAuthor({ name: "Giveaway Results", iconURL: "https://cdn-icons-png.flaticon.com/512/3227/3227447.png" })
       .setTimestamp();
 
     await message.channel.send({ content: winnerMentions, embeds: [winnerEmbed] });
   } else {
     const noWinnerEmbed = new EmbedBuilder()
       .setTitle("Giveaway Ended")
-      .setDescription(
-        `**${giveaway.prize}**\n\n` +
-        `No valid entries were recorded.\n` +
-        `Better luck next time!`
-      )
+      .setDescription(`**${giveaway.prize}**\n\nNo valid entries were recorded.`)
       .setColor(0xED4245)
       .setTimestamp();
 
@@ -391,11 +378,6 @@ async function listGiveaways(interaction, data) {
       return `• **${g.prize}** - ${winners}`;
     }).join("\n");
 
-    embed.addFields({
-      name: "\u200b",
-      value: "━━━━━━━━━━━━━━━━━━━━━━━━━",
-      inline: false
-    });
 
     embed.addFields({
       name: "📊 Recent Ended Giveaways",

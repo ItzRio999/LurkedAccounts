@@ -11,7 +11,6 @@ const path = require("path");
 const { isOwnerOrCoowner } = require("../utils/permissions");
 const { saveJson, addLogo } = require("../utils/fileManager");
 const { createTicketPanel, createTicketFromButton, handleClaim, handleClose, handleCloseConfirm, handleCloseCancel, getPanelConfig, DEFAULT_PANEL } = require("../features/tickets_v2");
-const { showRank, showLeaderboard, setUserLevel, addUserXp, removeUserXp, resetUserLevel } = require("../features/leveling");
 const { showStaffReport, showStaffStats } = require("../features/staffTracking_v2");
 const { showBoostReport, showBoostLog, showCurrentBoosters } = require("../features/boostTracking");
 const { createPoll } = require("../features/polls");
@@ -154,43 +153,6 @@ async function handleInteraction(interaction, config, data, configPath, dataPath
       return interaction.reply({ embeds: [embed] });
     }
 
-    if (subcommand === "leveling") {
-      const channel = interaction.options.getChannel("channel", true);
-      const role1 = interaction.options.getRole("role1");
-      const role2 = interaction.options.getRole("role2");
-      const role3 = interaction.options.getRole("role3");
-
-      config.level_channel_id = channel.id;
-
-      if (role1) config.level_roles[5] = role1.id;
-      if (role2) config.level_roles[10] = role2.id;
-      if (role3) config.level_roles[20] = role3.id;
-
-      saveJson(configPath, config);
-
-      let roleSetup = "";
-      if (role1) roleSetup += `• Level 5 → ${role1}\n`;
-      if (role2) roleSetup += `• Level 10 → ${role2}\n`;
-      if (role3) roleSetup += `• Level 20 → ${role3}\n`;
-
-      const embed = addLogo(
-        new EmbedBuilder()
-          .setTitle("Leveling System Configured")
-          .setDescription(
-            `Leveling system is now active.\n\u200b`
-          )
-          .addFields(
-            { name: "Level-up Channel", value: `${channel}`, inline: false },
-            { name: "Reward Roles", value: roleSetup || "None", inline: false },
-            { name: "Next Steps", value: "Use `/addlevelrole` for additional rewards.", inline: false }
-          )
-          .setColor(0x57F287)
-          .setFooter({ text: "Members earn XP for chatting" }),
-        config
-      );
-      return interaction.reply({ embeds: [embed] });
-    }
-
     if (subcommand === "staff") {
       const role1 = interaction.options.getRole("role1", true);
       const role2 = interaction.options.getRole("role2");
@@ -224,17 +186,6 @@ async function handleInteraction(interaction, config, data, configPath, dataPath
       );
       return interaction.reply({ embeds: [embed] });
     }
-  }
-
-  // ============== PUBLIC COMMANDS ==============
-  if (name === "rank") {
-    const user = interaction.options.getUser("user") || interaction.user;
-    return showRank(interaction, user, data, config);
-  }
-
-  if (name === "leaderboard") {
-    const limit = interaction.options.getInteger("limit") || 10;
-    return showLeaderboard(interaction, data, limit, config);
   }
 
   // ============== OWNER/COOWNER COMMANDS ==============
@@ -379,77 +330,6 @@ async function handleInteraction(interaction, config, data, configPath, dataPath
 
   if (name === "boosts") {
     return showCurrentBoosters(interaction, config, data);
-  }
-
-  // Leveling System
-  if (name === "setlevelchannel") {
-    const channel = interaction.options.getChannel("channel", true);
-    config.level_channel_id = channel.id;
-    saveJson(configPath, config);
-
-    const embed = addLogo(
-      new EmbedBuilder()
-        .setDescription(`✅ Level-up announcements will be sent to ${channel}`)
-        .setColor(0x57F287),
-      config
-    );
-    return interaction.reply({ embeds: [embed] });
-  }
-
-  if (name === "addlevelrole") {
-    const level = interaction.options.getInteger("level", true);
-    const role = interaction.options.getRole("role", true);
-    if (!config.level_roles) config.level_roles = {};
-    config.level_roles[level] = role.id;
-    saveJson(configPath, config);
-
-    const embed = addLogo(
-      new EmbedBuilder()
-        .setDescription(`✅ Role ${role} will be awarded at level ${level}`)
-        .setColor(0x57F287),
-      config
-    );
-    return interaction.reply({ embeds: [embed] });
-  }
-
-  if (name === "removelevelrole") {
-    const level = interaction.options.getInteger("level", true);
-    if (config.level_roles && config.level_roles[level]) {
-      delete config.level_roles[level];
-      saveJson(configPath, config);
-      const embed = addLogo(
-        new EmbedBuilder()
-          .setDescription(`✅ Removed level role for level ${level}`)
-          .setColor(0x57F287),
-        config
-      );
-      return interaction.reply({ embeds: [embed] });
-    } else {
-      const embed = addLogo(
-        new EmbedBuilder()
-          .setDescription("❌ No role set for that level!")
-          .setColor(0xED4245),
-        config
-      );
-      return interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
-    }
-  }
-
-  // Level Management
-  if (name === "setlevel") {
-    return setUserLevel(interaction, data, dataPath, config);
-  }
-
-  if (name === "addxp") {
-    return addUserXp(interaction, data, dataPath, config);
-  }
-
-  if (name === "removexp") {
-    return removeUserXp(interaction, data, dataPath, config);
-  }
-
-  if (name === "resetlevel") {
-    return resetUserLevel(interaction, data, dataPath, config);
   }
 
   // Ticket Setup - All-in-one configuration command
@@ -829,9 +709,8 @@ async function handleInteraction(interaction, config, data, configPath, dataPath
   if (name === "help") {
     const embed = new EmbedBuilder()
       .setTitle("Bot Commands & Features")
-      .setDescription("━━━━━━━━━━━━━━━━━━━━━━━━━\nHere's everything I can do for your server!")
+      .setDescription("Here's everything I can do for your server.")
       .setColor(0x5865F2)
-      .setAuthor({ name: "Command Help", iconURL: "https://cdn-icons-png.flaticon.com/512/471/471662.png" })
       .addFields(
         {
           name: "🎬 Movie Night",
@@ -869,19 +748,6 @@ async function handleInteraction(interaction, config, data, configPath, dataPath
           inline: false
         },
         {
-          name: "\u200b",
-          value: "━━━━━━━━━━━━━━━━━━━━━━━━━",
-          inline: false
-        },
-        {
-          name: "📊 Leveling System",
-          value:
-            "`/rank` - Check your rank and XP\n" +
-            "`/leaderboard` - Server XP leaderboard\n" +
-            "`/quicksetup leveling` - Quick leveling setup",
-          inline: true
-        },
-        {
           name: "👥 Staff Tracking",
           value:
             "`/staffreport` - Team activity overview\n" +
@@ -897,11 +763,6 @@ async function handleInteraction(interaction, config, data, configPath, dataPath
             "`/boostlog` - Boost history log\n" +
             "`/currentboosters` - Active boosters",
           inline: true
-        },
-        {
-          name: "\u200b",
-          value: "━━━━━━━━━━━━━━━━━━━━━━━━━",
-          inline: false
         },
         {
           name: "🛡️ Moderation",
@@ -950,15 +811,9 @@ async function handleInteraction(interaction, config, data, configPath, dataPath
           inline: true
         },
         {
-          name: "\u200b",
-          value: "━━━━━━━━━━━━━━━━━━━━━━━━━",
-          inline: false
-        },
-        {
           name: "⚙️ Quick Setup",
           value:
             "`/quicksetup tickets` - Setup tickets in one command\n" +
-            "`/quicksetup leveling` - Setup leveling in one command\n" +
             "`/quicksetup staff` - Setup staff tracking in one command",
           inline: false
         },
@@ -966,8 +821,7 @@ async function handleInteraction(interaction, config, data, configPath, dataPath
           name: "📝 Additional Commands",
           value:
             "`/setlogo` - Set server logo for embeds\n" +
-            "`/setlogchannel` - Set audit log channel\n" +
-            "`/addlevelrole` - Add level reward roles",
+            "`/setlogchannel` - Set audit log channel",
           inline: false
         }
       )
@@ -1130,11 +984,10 @@ async function handleInteraction(interaction, config, data, configPath, dataPath
     const userData = getUserStrikes(targetUser.id, data);
 
     const embed = new EmbedBuilder()
-      .setTitle(`📊 Strike Report - ${targetUser.tag}`)
-      .setDescription(`━━━━━━━━━━━━━━━━━━━━━━━━━`)
+      .setTitle(`Strike Report - ${targetUser.tag}`)
       .addFields(
-        { name: "⚠️ Current Strikes", value: `${userData.strikes}/3`, inline: true },
-        { name: "👤 User", value: `${targetUser}`, inline: true },
+        { name: "Current Strikes", value: `${userData.strikes}/3`, inline: true },
+        { name: "User", value: `${targetUser}`, inline: true },
         { name: "\u200b", value: "\u200b", inline: true }
       )
       .setColor(userData.strikes === 0 ? 0x57F287 : userData.strikes === 1 ? 0xFEE75C : userData.strikes === 2 ? 0xF26522 : 0xED4245)
@@ -1153,7 +1006,7 @@ async function handleInteraction(interaction, config, data, configPath, dataPath
         .join("\n");
 
       embed.addFields({
-        name: "📝 Recent Violations (Last 5)",
+        name: "Recent Violations (Last 5)",
         value: violationList,
         inline: false
       });
@@ -1166,7 +1019,7 @@ async function handleInteraction(interaction, config, data, configPath, dataPath
     }
 
     embed.addFields({
-      name: "⏰ Progressive Punishment System",
+      name: "Progressive Punishment System",
       value:
         `• Strike 1: Warning + 5 minute timeout\n` +
         `• Strike 2: 24 hour timeout\n` +
@@ -1243,10 +1096,10 @@ async function handleInteraction(interaction, config, data, configPath, dataPath
 
     const embed = addLogo(
       new EmbedBuilder()
-        .setTitle("🧹 Mass Strike Removal")
+        .setTitle("Mass Strike Removal")
         .setDescription(
           count > 0
-            ? `✅ Successfully cleared strikes from **${count}** user${count !== 1 ? 's' : ''}!`
+            ? `✅ Successfully cleared strikes from **${count}** user${count !== 1 ? 's' : ''}`
             : `⚠️ No strikes found in the database`
         )
         .setColor(count > 0 ? 0x57F287 : 0xFEE75C)
@@ -1312,27 +1165,25 @@ async function handleInteraction(interaction, config, data, configPath, dataPath
 
     const embed = new EmbedBuilder()
       .setTitle(`User Information - ${targetUser.tag}`)
-      .setDescription(`━━━━━━━━━━━━━━━━━━━━━━━━━`)
       .setColor(targetMember.displayHexColor || 0x5865F2)
       .setThumbnail(targetUser.displayAvatarURL({ dynamic: true, size: 256 }))
       .addFields(
-        { name: "👤 Username", value: targetUser.username, inline: true },
-        { name: "🏷️ Display Name", value: targetMember.displayName, inline: true },
-        { name: "🆔 User ID", value: `\`${targetUser.id}\``, inline: true },
-        { name: "📅 Account Created", value: `<t:${accountCreated}:F>\n<t:${accountCreated}:R> (${accountAgeDays} days ago)`, inline: false },
-        { name: "📥 Joined Server", value: `<t:${joinedServer}:F>\n<t:${joinedServer}:R> (${serverAgeDays} days ago)`, inline: false },
-        { name: "💎 Boost Status", value: boostStatus, inline: false },
-        { name: "📊 Status", value: statusText, inline: true },
-        { name: `🎭 Roles [${roles.length}]`, value: roles.length > 0 ? roles.join(", ") : "No roles", inline: false }
+        { name: "Username", value: targetUser.username, inline: true },
+        { name: "Display Name", value: targetMember.displayName, inline: true },
+        { name: "User ID", value: `\`${targetUser.id}\``, inline: true },
+        { name: "Account Created", value: `<t:${accountCreated}:F>\n<t:${accountCreated}:R> (${accountAgeDays} days ago)`, inline: false },
+        { name: "Joined Server", value: `<t:${joinedServer}:F>\n<t:${joinedServer}:R> (${serverAgeDays} days ago)`, inline: false },
+        { name: "Boost Status", value: boostStatus, inline: false },
+        { name: "Status", value: statusText, inline: true },
+        { name: `Roles [${roles.length}]`, value: roles.length > 0 ? roles.join(", ") : "No roles", inline: false }
       )
-      .setImage("https://media.giphy.com/media/l0HlBO7eyXzSZkJri/giphy.gif") // User info GIF
       .setFooter({ text: `Requested by ${interaction.user.tag}` })
       .setTimestamp();
 
     // Add permissions if user has any key permissions
     if (keyPermissions.length > 0) {
       embed.addFields({
-        name: "🔑 Key Permissions",
+        name: "Key Permissions",
         value: keyPermissions.join(", "),
         inline: false
       });
@@ -1340,7 +1191,7 @@ async function handleInteraction(interaction, config, data, configPath, dataPath
 
     // Add avatar link
     embed.addFields({
-      name: "🖼️ Avatar",
+      name: "Avatar",
       value: `[View Full Size](${targetUser.displayAvatarURL({ dynamic: true, size: 4096 })})`,
       inline: false
     });

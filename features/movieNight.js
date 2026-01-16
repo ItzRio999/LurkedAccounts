@@ -20,12 +20,9 @@ async function announceMovie(interaction, config, data, dataPath) {
   const movieRole = config.roles_panel?.roles?.find(r => r.id === "movies")?.role_id;
 
   const embed = new EmbedBuilder()
-    .setTitle(`${title}`)
+    .setTitle(title)
     .setColor(0xFF6B6B)
-    .setAuthor({ name: "Movie Night Announcement", iconURL: "https://cdn-icons-png.flaticon.com/512/3074/3074767.png" })
     .setTimestamp();
-
-  let description = "━━━━━━━━━━━━━━━━━━━━━━━━━\n";
 
   const fields = [];
   if (time) fields.push({ name: "⏰ Time", value: time, inline: true });
@@ -38,14 +35,13 @@ async function announceMovie(interaction, config, data, dataPath) {
   }
 
   embed.addFields(
-    { name: "\u200b", value: "━━━━━━━━━━━━━━━━━━━━━━━━━", inline: false },
-    { name: "👥 Attending", value: "0", inline: true },
-    { name: "❓ Maybe", value: "0", inline: true },
+    { name: "Attending", value: "0", inline: true },
+    { name: "Maybe", value: "0", inline: true },
     { name: "\u200b", value: "\u200b", inline: true }
   );
 
   if (poster) embed.setImage(poster);
-  embed.setFooter({ text: "Click the buttons below to RSVP or react during the movie", iconURL: "https://cdn-icons-png.flaticon.com/512/2311/2311524.png" });
+  embed.setFooter({ text: "Click the buttons below to RSVP or react during the movie" });
 
   // Add reaction buttons
   const row = new ActionRowBuilder().addComponents(
@@ -224,8 +220,7 @@ async function updateMovieEmbed(interaction, movie) {
     const updatedEmbed = new EmbedBuilder()
       .setTitle(oldEmbed.title)
       .setColor(oldEmbed.color)
-      .setAuthor({ name: "Movie Night Announcement", iconURL: "https://cdn-icons-png.flaticon.com/512/3074/3074767.png" })
-      .setFooter({ text: "Click the buttons below to RSVP or react during the movie", iconURL: "https://cdn-icons-png.flaticon.com/512/2311/2311524.png" });
+      .setFooter({ text: "Click the buttons below to RSVP or react during the movie" });
 
     const fields = [];
     if (movie.time) fields.push({ name: "⏰ Time", value: movie.time, inline: true });
@@ -241,9 +236,8 @@ async function updateMovieEmbed(interaction, movie) {
     }
 
     updatedEmbed.addFields(
-      { name: "\u200b", value: "━━━━━━━━━━━━━━━━━━━━━━━━━", inline: false },
-      { name: "👥 Attending", value: movie.attending.length.toString(), inline: true },
-      { name: "❓ Maybe", value: movie.maybe.length.toString(), inline: true },
+      { name: "Attending", value: movie.attending.length.toString(), inline: true },
+      { name: "Maybe", value: movie.maybe.length.toString(), inline: true },
       { name: "\u200b", value: "\u200b", inline: true }
     );
 
@@ -279,7 +273,6 @@ async function showSchedule(interaction, data) {
   const embed = new EmbedBuilder()
     .setTitle("Upcoming Movie Schedule")
     .setColor(0xFF6B6B)
-    .setAuthor({ name: "Movie Night Calendar", iconURL: "https://cdn-icons-png.flaticon.com/512/3176/3176366.png" })
     .setTimestamp()
     .setFooter({ text: `${upcoming.length} upcoming movie${upcoming.length !== 1 ? "s" : ""}` });
 
@@ -328,17 +321,16 @@ async function addToSchedule(interaction, data, dataPath) {
   const embed = new EmbedBuilder()
     .setTitle("Movie Added to Schedule")
     .setColor(0x57F287)
-    .setAuthor({ name: "Schedule Manager", iconURL: "https://cdn-icons-png.flaticon.com/512/3176/3176366.png" })
     .addFields(
-      { name: "🎬 Movie", value: title, inline: false },
-      { name: "📅 Date & Time", value: `<t:${timestamp}:F>`, inline: false },
-      { name: "⏰ Countdown", value: `<t:${timestamp}:R>`, inline: false }
+      { name: "Movie", value: title, inline: false },
+      { name: "Date & Time", value: `<t:${timestamp}:F>`, inline: false },
+      { name: "Countdown", value: `<t:${timestamp}:R>`, inline: false }
     )
     .setTimestamp()
     .setFooter({ text: `Scheduled by ${interaction.user.username}`, iconURL: interaction.user.displayAvatarURL() });
 
   if (genre) {
-    embed.addFields({ name: "🎭 Genre", value: genre, inline: false });
+    embed.addFields({ name: "Genre", value: genre, inline: false });
   }
 
   await interaction.reply({ embeds: [embed] });
@@ -419,36 +411,28 @@ async function showStats(interaction, data) {
   const embed = new EmbedBuilder()
     .setTitle("Movie Night Statistics")
     .setColor(0xFF6B6B)
-    .setAuthor({ name: "Server Movie Stats", iconURL: "https://cdn-icons-png.flaticon.com/512/1611/1611179.png" })
-    .setDescription(`━━━━━━━━━━━━━━━━━━━━━━━━━\n**Total Movies Hosted:** ${totalMovies}`)
+    .setDescription(`**Total Movies Hosted:** ${totalMovies}`)
     .addFields(
-      { name: "\u200b", value: "\u200b", inline: false },
-      { name: "📊 Average Attendance", value: `${avgAttendance} viewers`, inline: true },
-      { name: "💬 Total Reactions", value: `${totalReactions}`, inline: true },
+      { name: "Average Attendance", value: `${avgAttendance} viewers`, inline: true },
+      { name: "Total Reactions", value: `${totalReactions}`, inline: true },
       { name: "\u200b", value: "\u200b", inline: true }
     )
-    .setTimestamp()
-    .setFooter({ text: "Keep the movie nights going!" });
+    .setTimestamp();
 
   if (mostPopular) {
     embed.addFields({
-      name: "🔥 Most Popular Movie",
+      name: "Most Popular Movie",
       value: `**${mostPopular.title}**\n${mostPopular.attending.length} attendees`,
       inline: false
     });
   }
 
   if (topGenres) {
-    embed.addFields({ name: "🎭 Top Genres", value: topGenres, inline: false });
+    embed.addFields({ name: "Top Genres", value: topGenres, inline: false });
   }
 
   if (recent) {
-    embed.addFields({
-      name: "\u200b",
-      value: "━━━━━━━━━━━━━━━━━━━━━━━━━",
-      inline: false
-    });
-    embed.addFields({ name: "📽️ Recent Movies", value: recent, inline: false });
+    embed.addFields({ name: "Recent Movies", value: recent, inline: false });
   }
 
   // Upcoming from schedule
@@ -463,12 +447,7 @@ async function showStats(interaction, data) {
         const timestamp = Math.floor(new Date(m.date).getTime() / 1000);
         return `• ${m.title} - <t:${timestamp}:R>`;
       }).join("\n");
-      embed.addFields({
-        name: "\u200b",
-        value: "━━━━━━━━━━━━━━━━━━━━━━━━━",
-        inline: false
-      });
-      embed.addFields({ name: "📅 Coming Up Next", value: upcomingText, inline: false });
+      embed.addFields({ name: "Coming Up Next", value: upcomingText, inline: false });
     }
   }
 
@@ -480,38 +459,32 @@ async function showVolumeHelp(interaction) {
   const embed = new EmbedBuilder()
     .setTitle("Audio & Volume Troubleshooting")
     .setColor(0x5865F2)
-    .setAuthor({ name: "Volume Boost Guide", iconURL: "https://cdn-icons-png.flaticon.com/512/727/727269.png" })
     .addFields(
       {
-        name: "🔊 Step 1: Discord User Volume (MOST IMPORTANT)",
-        value: "Right-click the host's profile → **User Volume** → Slide to **200%**\n`This is the #1 fix for low volume`",
+        name: "Step 1: Discord User Volume",
+        value: "Right-click the host's profile → User Volume → Slide to 200%\nThis is the most common fix for low volume",
         inline: false
       },
       {
-        name: "🌐 Step 2: Browser Extensions",
+        name: "Step 2: Browser Extensions",
         value:
-          "**Chrome/Edge:** [Volume Master](https://chrome.google.com/webstore/detail/volume-master/jghecgabfgfdldnmbfkhmffcabddioke) (up to 600%)\n" +
-          "**Firefox:** [Volume Booster](https://addons.mozilla.org/en-US/firefox/addon/600-sound-volume/) (up to 600%)\n" +
+          "Chrome/Edge: Volume Master extension (up to 600%)\n" +
+          "Firefox: Volume Booster addon (up to 600%)\n" +
           "Install → Click icon → Boost to 200-400%",
         inline: false
       },
       {
-        name: "💻 Step 3: System Volume (Windows)",
-        value: "Sound Settings → Discord → App volume → **100%**\nOR: Volume Mixer (Win+G) → Discord to max",
+        name: "Step 3: System Volume (Windows)",
+        value: "Sound Settings → Discord → App volume → 100%\nOR: Volume Mixer (Win+G) → Discord to max",
         inline: false
       },
       {
-        name: "🎥 Step 4: Host Settings",
-        value: "When screen sharing: **MUST check 'Share audio'**\nShare entire screen (not tab) for better quality",
+        name: "Step 4: Host Settings",
+        value: "When screen sharing: Check 'Share audio'\nShare entire screen (not tab) for better quality",
         inline: false
       },
       {
-        name: "\u200b",
-        value: "━━━━━━━━━━━━━━━━━━━━━━━━━",
-        inline: false
-      },
-      {
-        name: "🔧 Advanced Fixes",
+        name: "Advanced Fixes",
         value:
           "1. Discord: Voice & Video → Input Sensitivity (disable auto)\n" +
           "2. Windows: Sound → Playback → Discord → Enhancements → Loudness Equalization\n" +
@@ -520,7 +493,7 @@ async function showVolumeHelp(interaction) {
         inline: false
       },
       {
-        name: "❌ No Audio At All?",
+        name: "No Audio At All?",
         value:
           "• Host: Stop share → Reshare → Check 'Share audio'\n" +
           "• Viewers: Leave VC and rejoin\n" +
@@ -529,7 +502,7 @@ async function showVolumeHelp(interaction) {
         inline: false
       },
       {
-        name: "⚠️ Audio Cutting/Lagging?",
+        name: "Audio Cutting/Lagging?",
         value:
           "• Lower bitrate: Voice & Video → Bitrate (96kbps)\n" +
           "• Enable Legacy Audio subsystem\n" +
@@ -539,7 +512,7 @@ async function showVolumeHelp(interaction) {
       }
     )
     .setTimestamp()
-    .setFooter({ text: "Test audio 30 seconds before movie starts | Most issues = Discord user volume slider" });
+    .setFooter({ text: "Test audio 30 seconds before movie starts" });
 
   await interaction.reply({ embeds: [embed] });
 }
@@ -558,9 +531,7 @@ async function createMoviePoll(interaction, data, dataPath) {
   const embed = new EmbedBuilder()
     .setTitle(question)
     .setColor(0xFF6B6B)
-    .setAuthor({ name: "Movie Poll", iconURL: "https://cdn-icons-png.flaticon.com/512/1705/1705312.png" })
-    .setDescription("━━━━━━━━━━━━━━━━━━━━━━━━━")
-    .setFooter({ text: `Poll by ${interaction.user.username} • React to vote`, iconURL: interaction.user.displayAvatarURL() })
+    .setFooter({ text: `Poll by ${interaction.user.username} - React to vote`, iconURL: interaction.user.displayAvatarURL() })
     .setTimestamp();
 
   options.forEach((opt, i) => {

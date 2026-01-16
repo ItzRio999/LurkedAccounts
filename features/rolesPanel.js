@@ -5,7 +5,7 @@ const {
   ButtonStyle,
   MessageFlags,
 } = require("discord.js");
-const { saveJson } = require("../utils/fileManager");
+const { saveJson, addLogo } = require("../utils/fileManager");
 
 // Default roles panel configuration
 const DEFAULT_ROLES_PANEL = {
@@ -68,15 +68,14 @@ async function createRolesPanel(interaction, config, configPath) {
 
   const embed = new EmbedBuilder()
     .setTitle(panel.title)
-    .setDescription(panel.description + "\n━━━━━━━━━━━━━━━━━━━━━━━━━")
+    .setDescription(panel.description)
     .setColor(panel.color)
-    .setAuthor({ name: "Role Management", iconURL: "https://cdn-icons-png.flaticon.com/512/1041/1041916.png" })
     .setFooter({ text: panel.footer })
     .setTimestamp();
 
   if (panel.thumbnail) embed.setThumbnail(panel.thumbnail);
   if (panel.image) embed.setImage(panel.image);
-  if (config.logo_url) embed.setThumbnail(config.logo_url);
+  addLogo(embed, config);
 
   // Create button rows (max 5 buttons per row)
   const buttons = validRoles.map(r =>

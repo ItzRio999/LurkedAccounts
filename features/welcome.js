@@ -11,15 +11,14 @@ async function sendWelcomeMessage(member, config) {
   message = message.replace(/{user}/g, `${member}`).replace(/{server}/g, member.guild.name);
 
   const embed = new EmbedBuilder()
-    .setTitle("👋 Welcome to the Community!")
-    .setDescription(message + `\n\nWe're glad to have you here!`)
+    .setTitle("Welcome")
+    .setDescription(message)
     .setColor(0x57F287)
     .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 256 }))
     .addFields(
-      { name: "📅 Account Created", value: `<t:${Math.floor(member.user.createdTimestamp / 1000)}:R>`, inline: true },
-      { name: "👥 Member Count", value: `#${member.guild.memberCount}`, inline: true }
+      { name: "Account Created", value: `<t:${Math.floor(member.user.createdTimestamp / 1000)}:R>`, inline: true },
+      { name: "Member Count", value: `#${member.guild.memberCount}`, inline: true }
     )
-    .setFooter({ text: "Enjoy your stay and feel free to reach out if you need help!" })
     .setTimestamp();
 
   await channel.send({ embeds: [embed] }).catch(console.error);
@@ -42,19 +41,18 @@ async function sendLeaveMessage(member, config) {
     .join(", ");
 
   const embed = new EmbedBuilder()
-    .setTitle("👋 Member Departure")
+    .setTitle("Member Left")
     .setDescription(message)
     .setColor(0xED4245)
     .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 256 }))
     .addFields(
-      { name: "📅 Joined", value: `<t:${Math.floor(member.joinedTimestamp / 1000)}:R>`, inline: true },
-      { name: "👥 Members Now", value: `${member.guild.memberCount}`, inline: true }
+      { name: "Joined", value: `<t:${Math.floor(member.joinedTimestamp / 1000)}:R>`, inline: true },
+      { name: "Members Now", value: `${member.guild.memberCount}`, inline: true }
     )
-    .setFooter({ text: "We hope to see them again soon" })
     .setTimestamp();
 
   if (roles) {
-    embed.addFields({ name: "🎭 Roles They Had", value: roles });
+    embed.addFields({ name: "Roles They Had", value: roles });
   }
 
   await channel.send({ embeds: [embed] }).catch(console.error);

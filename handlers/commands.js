@@ -28,21 +28,6 @@ const commands = [
     )
     .addSubcommand(sub =>
       sub
-        .setName("leveling")
-        .setDescription("Setup leveling system in one command")
-        .addChannelOption((opt) =>
-          opt
-            .setName("channel")
-            .setDescription("Channel for level-up messages")
-            .addChannelTypes(ChannelType.GuildText)
-            .setRequired(true)
-        )
-        .addRoleOption(opt => opt.setName("role1").setDescription("Role for level 5"))
-        .addRoleOption(opt => opt.setName("role2").setDescription("Role for level 10"))
-        .addRoleOption(opt => opt.setName("role3").setDescription("Role for level 20"))
-    )
-    .addSubcommand(sub =>
-      sub
         .setName("staff")
         .setDescription("Setup staff tracking in one command")
         .addRoleOption((opt) => opt.setName("role1").setDescription("Staff role to track").setRequired(true))
@@ -132,71 +117,6 @@ const commands = [
   new SlashCommandBuilder()
     .setName("boosts")
     .setDescription("Show current booster count and status")
-    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
-
-  // ============== LEVELING SYSTEM ==============
-  new SlashCommandBuilder()
-    .setName("rank")
-    .setDescription("Check your or someone's rank and XP")
-    .addUserOption((opt) => opt.setName("user").setDescription("User to check (leave empty for yourself)")),
-
-  new SlashCommandBuilder()
-    .setName("leaderboard")
-    .setDescription("Show the XP leaderboard")
-    .addIntegerOption((opt) =>
-      opt
-        .setName("limit")
-        .setDescription("Number of users to show (default: 10)")
-        .setMinValue(1)
-        .setMaxValue(25)
-    ),
-
-  new SlashCommandBuilder()
-    .setName("setlevelchannel")
-    .setDescription("Set channel for level-up announcements")
-    .addChannelOption((opt) => opt.setName("channel").setDescription("Level-up channel").setRequired(true))
-    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
-
-  new SlashCommandBuilder()
-    .setName("addlevelrole")
-    .setDescription("Add a role reward for reaching a level")
-    .addIntegerOption((opt) =>
-      opt.setName("level").setDescription("Level requirement").setRequired(true).setMinValue(1).setMaxValue(100)
-    )
-    .addRoleOption((opt) => opt.setName("role").setDescription("Role to award").setRequired(true))
-    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
-
-  new SlashCommandBuilder()
-    .setName("removelevelrole")
-    .setDescription("Remove a level role reward")
-    .addIntegerOption((opt) => opt.setName("level").setDescription("Level").setRequired(true))
-    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
-
-  new SlashCommandBuilder()
-    .setName("setlevel")
-    .setDescription("Set a user's level (Owner/Co-owner only)")
-    .addUserOption((opt) => opt.setName("user").setDescription("User to modify").setRequired(true))
-    .addIntegerOption((opt) => opt.setName("level").setDescription("New level").setRequired(true).setMinValue(0).setMaxValue(100))
-    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
-
-  new SlashCommandBuilder()
-    .setName("addxp")
-    .setDescription("Add XP to a user (Owner/Co-owner only)")
-    .addUserOption((opt) => opt.setName("user").setDescription("User to give XP").setRequired(true))
-    .addIntegerOption((opt) => opt.setName("amount").setDescription("Amount of XP").setRequired(true).setMinValue(1).setMaxValue(10000))
-    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
-
-  new SlashCommandBuilder()
-    .setName("removexp")
-    .setDescription("Remove XP from a user (Owner/Co-owner only)")
-    .addUserOption((opt) => opt.setName("user").setDescription("User to remove XP from").setRequired(true))
-    .addIntegerOption((opt) => opt.setName("amount").setDescription("Amount of XP").setRequired(true).setMinValue(1).setMaxValue(10000))
-    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
-
-  new SlashCommandBuilder()
-    .setName("resetlevel")
-    .setDescription("Reset a user's level and XP (Owner/Co-owner only)")
-    .addUserOption((opt) => opt.setName("user").setDescription("User to reset").setRequired(true))
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 
   // ============== TICKET SYSTEM ==============

@@ -32,12 +32,12 @@ async function createPoll(interaction, data, dataPath) {
 
   const embed = new EmbedBuilder()
     .setAuthor({ name: interaction.user.tag, iconURL: interaction.user.displayAvatarURL({ dynamic: true, size: 256 }) })
-    .setTitle("📊 Community Poll")
-    .setDescription(`**${question}**\n\nReact with your choice below:\n\u200b\n${optionText}`)
+    .setTitle("Community Poll")
+    .setDescription(`**${question}**\n\nReact with your choice below:\n\n${optionText}`)
     .addFields(
-      { name: "⏰ Duration", value: `${duration} minute${duration !== 1 ? "s" : ""}`, inline: true },
-      { name: "🕒 Ends", value: `<t:${endTimestamp}:R>`, inline: true },
-      { name: "👤 Created By", value: interaction.user.toString(), inline: true }
+      { name: "Duration", value: `${duration} minute${duration !== 1 ? "s" : ""}`, inline: true },
+      { name: "Ends", value: `<t:${endTimestamp}:R>`, inline: true },
+      { name: "Created By", value: interaction.user.toString(), inline: true }
     )
     .setColor(0x5865F2)
     .setFooter({ text: "Vote by clicking the reactions below" })
@@ -108,10 +108,10 @@ async function endPoll(messageId, guild, data, dataPath) {
     const winnerText = maxVotes > 0 ? `\n\n**Winner:** ${results[0].option} 👑` : "";
 
     const embed = new EmbedBuilder()
-      .setTitle("📊 Poll Results")
-      .setDescription(`**${poll.question}**${winnerText}\n\u200b\n${resultsText || "No votes received"}`)
+      .setTitle("Poll Results")
+      .setDescription(`**${poll.question}**${winnerText}\n\n${resultsText || "No votes received"}`)
       .setColor(0x57F287)
-      .setFooter({ text: `${totalVotes} total vote${totalVotes !== 1 ? "s" : ""} • Thank you for participating!` })
+      .setFooter({ text: `${totalVotes} total vote${totalVotes !== 1 ? "s" : ""}` })
       .setTimestamp();
 
     await channel.send({ embeds: [embed] });
@@ -120,7 +120,7 @@ async function endPoll(messageId, guild, data, dataPath) {
     const originalEmbed = message.embeds[0];
     const updatedEmbed = EmbedBuilder.from(originalEmbed)
       .setColor(0x808080)
-      .setFooter({ text: "This poll has ended • Results posted below" });
+      .setFooter({ text: "This poll has ended - Results posted below" });
 
     await message.edit({ embeds: [updatedEmbed] }).catch(console.error);
   } catch (error) {

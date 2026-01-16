@@ -187,12 +187,12 @@ async function showStaffReport(interaction, data, config) {
   staffStats.sort((a, b) => b.messages - a.messages);
 
   const embed = new EmbedBuilder()
-    .setTitle(`📊 Staff Activity Report`)
-    .setDescription(`Activity over the last **${days} days**\n\u200b`)
+    .setTitle(`Staff Activity Report`)
+    .setDescription(`Activity over the last **${days} days**`)
     .setColor(0x5865F2)
     .setTimestamp();
 
-  if (config.logo_url) embed.setThumbnail(config.logo_url);
+  addLogo(embed, config);
 
   if (staffStats.length === 0) {
     embed.setDescription(`No staff activity recorded in the last ${days} days.`);
@@ -223,7 +223,7 @@ async function showStaffReport(interaction, data, config) {
 
     embed.addFields(
       {
-        name: "📈 Statistics",
+        name: "Statistics",
         value: `**Avg Messages/Staff:** ${avgMessages}\n**Most Active:** <@${staffStats[0].userId}> (${staffStats[0].messages} msgs)`,
         inline: true
       }
@@ -270,8 +270,8 @@ async function showStaffStats(interaction, data, config) {
   dailyActivity.sort((a, b) => b.date.localeCompare(a.date));
 
   const embed = new EmbedBuilder()
-    .setTitle(`📊 Staff Statistics - ${user.tag}`)
-    .setDescription(`Activity overview for the last **${days} days**\n\u200b`)
+    .setTitle(`Staff Statistics - ${user.tag}`)
+    .setDescription(`Activity overview for the last **${days} days**`)
     .setColor(0x5865F2)
     .setThumbnail(user.displayAvatarURL({ dynamic: true, size: 256 }))
     .setTimestamp();
@@ -282,7 +282,7 @@ async function showStaffStats(interaction, data, config) {
   // Overall stats with streaks
   embed.addFields(
     {
-      name: "📈 Overall Activity",
+      name: "Overall Activity",
       value:
         `**Total Messages:** ${messageCount}\n` +
         `**Active Days:** ${activeDays}/${days}\n` +
@@ -291,7 +291,7 @@ async function showStaffStats(interaction, data, config) {
       inline: true
     },
     {
-      name: "🔥 Streaks & Records",
+      name: "Streaks & Records",
       value:
         `**Current Streak:** ${activity.streak || 0} days\n` +
         `**Longest Streak:** ${activity.longest_streak || 0} days\n` +
@@ -300,7 +300,7 @@ async function showStaffStats(interaction, data, config) {
       inline: true
     },
     {
-      name: "⏰ Timestamps",
+      name: "Timestamps",
       value:
         `**First Tracked:** <t:${Math.floor(Date.parse(activity.first_tracked) / 1000)}:R>\n` +
         `**Last Active:** <t:${Math.floor(Date.parse(activity.last_active) / 1000)}:R>`,
@@ -314,7 +314,7 @@ async function showStaffStats(interaction, data, config) {
     const color = getPerformanceColor(parseFloat(performance.percentage));
 
     embed.addFields({
-      name: "🎫 Ticket Performance",
+      name: "Ticket Performance",
       value:
         `**Performance Rating:** ${performanceBar} **${performance.percentage}%**\n` +
         `**Average Rating:** ${performance.avgRating}/5.00 ⭐\n` +
@@ -324,7 +324,7 @@ async function showStaffStats(interaction, data, config) {
     });
   } else if (activity.tickets_handled > 0) {
     embed.addFields({
-      name: "🎫 Ticket Performance",
+      name: "Ticket Performance",
       value: `**Tickets Handled:** ${activity.tickets_handled}\n**Ratings:** No ratings yet`,
       inline: false
     });
@@ -333,7 +333,7 @@ async function showStaffStats(interaction, data, config) {
   // Show achievements if any
   if (activity.achievements && activity.achievements.length > 0) {
     embed.addFields({
-      name: "🏆 Achievements Unlocked",
+      name: "Achievements Unlocked",
       value: activity.achievements.join("\n") || "None yet",
       inline: false
     });
@@ -347,7 +347,7 @@ async function showStaffStats(interaction, data, config) {
     ).join("\n");
 
     embed.addFields({
-      name: "🎯 Recent Milestones",
+      name: "Recent Milestones",
       value: milestoneText,
       inline: false
     });
@@ -366,7 +366,7 @@ async function showStaffStats(interaction, data, config) {
     }
 
     embed.addFields({
-      name: "📅 Recent Daily Activity",
+      name: "Recent Daily Activity",
       value: breakdown || "No recent activity",
       inline: false
     });
@@ -415,12 +415,12 @@ async function generateWeeklyReport(client, config, data, dataPath) {
   staffStats.sort((a, b) => b.messages - a.messages);
 
   const embed = new EmbedBuilder()
-    .setTitle(`📊 Weekly Staff Report`)
-    .setDescription(`Automated weekly activity report\n\u200b`)
+    .setTitle(`Weekly Staff Report`)
+    .setDescription(`Automated weekly activity report`)
     .setColor(0x5865F2)
     .setTimestamp();
 
-  if (config.logo_url) embed.setThumbnail(config.logo_url);
+  addLogo(embed, config);
 
   let leaderboard = "";
   for (let i = 0; i < Math.min(staffStats.length, 10); i++) {

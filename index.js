@@ -9,7 +9,7 @@ const commands = require("./handlers/commands");
 const ApiServer = require("./api/server");
 
 // Lazy-load feature modules (loaded on-demand for better memory efficiency on Pi)
-let levelingModule, ticketsModule, staffTrackingModule, boostTrackingModule;
+let ticketsModule, staffTrackingModule, boostTrackingModule;
 let welcomeModule, auditLogsModule, pollsModule, giveawaysModule, automodModule, ticketEnhancementsModule;
 
 // Load configuration and data
@@ -31,7 +31,6 @@ if (!config.token) {
 const data = loadJson(DATA_PATH, {
   staff_activity: {},
   boost_log: [],
-  levels: {},
   tickets: {},
   ticket_counter: 0,
   closed_tickets: [],
@@ -133,7 +132,6 @@ client.on("clientReady", async () => {
     { name: "to /help commands ❓", type: ActivityType.Listening, state: "Ready to Assist" },
     { name: `${client.guilds.cache.size} server${client.guilds.cache.size !== 1 ? 's' : ''} 🌐`, type: ActivityType.Watching, state: "Multi-Server" },
     { name: "for bad words 🛡️", type: ActivityType.Watching, state: "Auto-Moderation" },
-    { name: "leveling system 🎮", type: ActivityType.Competing, state: "Rank Up!" },
   ];
 
   let currentStatus = 0;
@@ -198,7 +196,6 @@ client.on("messageCreate", async (message) => {
   // Lazy load modules on first use
   if (!automodModule) automodModule = require("./features/automod");
   if (!ticketEnhancementsModule) ticketEnhancementsModule = require("./features/ticketEnhancements");
-  if (!levelingModule) levelingModule = require("./features/leveling");
   if (!ticketsModule) ticketsModule = require("./features/tickets_v2");
   if (!staffTrackingModule) staffTrackingModule = require("./features/staffTracking_v2");
   if (!auditLogsModule) auditLogsModule = require("./features/auditLogs");
@@ -212,12 +209,6 @@ client.on("messageCreate", async (message) => {
   // Track staff activity
   if (message.member && hasStaffRole(message.member, config)) {
     staffTrackingModule.incStaffActivity(message.author.id, data, DATA_PATH);
-  }
-
-  // Add XP for leveling system
-  const result = levelingModule.addXp(message.author.id, data, DATA_PATH);
-  if (result && result.leveledUp) {
-    await levelingModule.handleLevelUp(message, result.newLevel, config, data);
   }
 
   // Log messages in tickets for transcripts

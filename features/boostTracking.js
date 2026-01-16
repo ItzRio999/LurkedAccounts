@@ -34,13 +34,13 @@ async function showBoostReport(interaction, data) {
   const net = gains - losses;
 
   const embed = new EmbedBuilder()
-    .setTitle("📊 Boost Report")
+    .setTitle("Boost Report")
     .setDescription(`Server boost statistics for the last ${days} day${days !== 1 ? "s" : ""}.`)
     .addFields(
-      { name: "📈 Boosts Gained", value: `${gains}`, inline: true },
-      { name: "📉 Boosts Lost", value: `${losses}`, inline: true },
+      { name: "Boosts Gained", value: `${gains}`, inline: true },
+      { name: "Boosts Lost", value: `${losses}`, inline: true },
       {
-        name: "📊 Net Change",
+        name: "Net Change",
         value: `${net >= 0 ? "+" : ""}${net}`,
         inline: true,
       }
@@ -71,7 +71,7 @@ async function showBoostLog(interaction, data) {
     .join("\n\n");
 
   const embed = new EmbedBuilder()
-    .setTitle("📋 Recent Boost Events")
+    .setTitle("Recent Boost Events")
     .setDescription(description)
     .setColor(0x5865F2)
     .setFooter({ text: `Showing ${entries.length} most recent event${entries.length !== 1 ? "s" : ""}` })
@@ -117,18 +117,18 @@ async function showCurrentBoosters(interaction, config, data) {
   let description = `Current boosters and boost level for ${interaction.guild.name}\n\n`;
 
   if (nextThreshold) {
-    description += `**${toNextLevel}** more boost${toNextLevel !== 1 ? "s" : ""} needed to reach **${levelNames[boostLevel + 1]}**! 🎯`;
+    description += `${toNextLevel} more boost${toNextLevel !== 1 ? "s" : ""} needed to reach ${levelNames[boostLevel + 1]}`;
   } else {
-    description += `**Maximum boost level reached!** 🎉`;
+    description += `Maximum boost level reached`;
   }
 
   const embed = new EmbedBuilder()
-    .setTitle("💎 Server Boost Status")
+    .setTitle("Server Boost Status")
     .setDescription(description)
     .addFields(
-      { name: "🎯 Boost Level", value: levelNames[boostLevel] || "Unknown", inline: true },
-      { name: "📊 Total Boosts", value: `${boostCount}`, inline: true },
-      { name: "👥 Active Boosters", value: `${boosters.size}`, inline: true }
+      { name: "Boost Level", value: levelNames[boostLevel] || "Unknown", inline: true },
+      { name: "Total Boosts", value: `${boostCount}`, inline: true },
+      { name: "Active Boosters", value: `${boosters.size}`, inline: true }
     )
     .setColor(0xF47FFF)
     .setTimestamp();
@@ -142,7 +142,7 @@ async function showCurrentBoosters(interaction, config, data) {
         return `${medal} ${mention(userId)} - **${count}** boost${count !== 1 ? "s" : ""}`;
       })
       .join("\n");
-    embed.addFields({ name: "🏆 Top Boosters", value: topBoosterText });
+    embed.addFields({ name: "Top Boosters", value: topBoosterText });
   }
 
   // Add booster list if small enough
@@ -154,11 +154,11 @@ async function showCurrentBoosters(interaction, config, data) {
         return `${mention(m.id)} - Boosting since <t:${sinceTimestamp}:R>`;
       })
       .join("\n");
-    embed.addFields({ name: "💝 Thank you to our Boosters!", value: boosterList });
+    embed.addFields({ name: "Thank you to our Boosters", value: boosterList });
   } else if (boosters.size > 15) {
     embed.addFields({
-      name: "💝 Boosters",
-      value: `Too many to list! Use \`/boostlog\` to see recent boost activity.`
+      name: "Boosters",
+      value: `Too many to list. Use /boostlog to see recent boost activity.`
     });
   }
 

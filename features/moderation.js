@@ -53,11 +53,10 @@ async function nukeMessages(interaction) {
 
     // Send public nuke embed with GIF
     const nukeEmbed = new EmbedBuilder()
-      .setTitle("💥 CHANNEL NUKED 💥")
-      .setDescription(`**Nuked by ${interaction.user}**\n\n🔥 **${totalDeleted} message${totalDeleted !== 1 ? "s" : ""} obliterated!** 🔥${targetUser ? `\n\n👤 Target: ${targetUser}` : ""}`)
-      .setImage("https://media.giphy.com/media/HhTXt43pk1I1W/giphy.gif") // Nuke explosion GIF
+      .setTitle("Channel Cleared")
+      .setDescription(`Cleared by ${interaction.user}\n\n**${totalDeleted} message${totalDeleted !== 1 ? "s" : ""} deleted**${targetUser ? `\nTarget: ${targetUser}` : ""}`)
       .setColor(0xFF4500)
-      .setFooter({ text: totalDeleted < amount ? `Stopped at ${totalDeleted} messages` : "Nuke complete!" })
+      .setFooter({ text: totalDeleted < amount ? `Stopped at ${totalDeleted} messages` : "Clear complete" })
       .setTimestamp();
 
     await interaction.channel.send({ embeds: [nukeEmbed] });
@@ -113,12 +112,12 @@ async function timeoutUser(interaction) {
     // Try to DM the user
     try {
       const dmEmbed = new EmbedBuilder()
-        .setTitle("⏰ You Have Been Timed Out")
-        .setDescription(`You have been timed out in **${interaction.guild.name}**\n━━━━━━━━━━━━━━━━━━━━━━━━━`)
+        .setTitle("You Have Been Timed Out")
+        .setDescription(`You have been timed out in **${interaction.guild.name}**`)
         .addFields(
-          { name: "⏱️ Duration", value: formatDuration(durationMs), inline: true },
-          { name: "👮 Moderator", value: interaction.user.tag, inline: true },
-          { name: "📝 Reason", value: reason, inline: false }
+          { name: "Duration", value: formatDuration(durationMs), inline: true },
+          { name: "Moderator", value: interaction.user.tag, inline: true },
+          { name: "Reason", value: reason, inline: false }
         )
         .setColor(0xFEE75C)
         .setTimestamp();
@@ -129,17 +128,14 @@ async function timeoutUser(interaction) {
     }
 
     const embed = new EmbedBuilder()
-      .setTitle("⏰ User Timed Out")
-      .setDescription("━━━━━━━━━━━━━━━━━━━━━━━━━")
+      .setTitle("User Timed Out")
       .addFields(
-        { name: "👤 User", value: `${targetUser} (${targetUser.tag})`, inline: true },
-        { name: "⏱️ Duration", value: formatDuration(durationMs), inline: true },
-        { name: "👮 Moderator", value: `${interaction.user}`, inline: true },
-        { name: "📝 Reason", value: reason, inline: false }
+        { name: "User", value: `${targetUser} (${targetUser.tag})`, inline: true },
+        { name: "Duration", value: formatDuration(durationMs), inline: true },
+        { name: "Moderator", value: `${interaction.user}`, inline: true },
+        { name: "Reason", value: reason, inline: false }
       )
       .setColor(0xFEE75C)
-      .setImage("https://media.giphy.com/media/l1J9EdzfOSgfyueLm/giphy.gif") // Timeout/mute GIF
-      .setAuthor({ name: "Moderation Action", iconURL: "https://cdn-icons-png.flaticon.com/512/1828/1828640.png" })
       .setFooter({ text: `User ID: ${targetUser.id}` })
       .setTimestamp();
 
@@ -178,17 +174,14 @@ async function untimeoutUser(interaction) {
     await member.timeout(null, reason);
 
     const embed = new EmbedBuilder()
-      .setTitle("✅ Timeout Removed")
-      .setDescription("━━━━━━━━━━━━━━━━━━━━━━━━━")
+      .setTitle("Timeout Removed")
       .addFields(
-        { name: "👤 User", value: `${targetUser} (${targetUser.tag})`, inline: true },
-        { name: "👮 Moderator", value: `${interaction.user}`, inline: true },
+        { name: "User", value: `${targetUser} (${targetUser.tag})`, inline: true },
+        { name: "Moderator", value: `${interaction.user}`, inline: true },
         { name: "\u200b", value: "\u200b", inline: true },
-        { name: "📝 Reason", value: reason, inline: false }
+        { name: "Reason", value: reason, inline: false }
       )
       .setColor(0x57F287)
-      .setImage("https://media.giphy.com/media/Mp4hQy51LjY6A/giphy.gif") // Freedom/celebration GIF
-      .setAuthor({ name: "Moderation Action", iconURL: "https://cdn-icons-png.flaticon.com/512/1828/1828640.png" })
       .setTimestamp();
 
     await interaction.reply({ embeds: [embed] });
@@ -233,11 +226,11 @@ async function kickUser(interaction) {
     // Try to DM before kicking
     try {
       const dmEmbed = new EmbedBuilder()
-        .setTitle("👢 You Have Been Kicked")
-        .setDescription(`You have been kicked from **${interaction.guild.name}**\n━━━━━━━━━━━━━━━━━━━━━━━━━`)
+        .setTitle("You Have Been Kicked")
+        .setDescription(`You have been kicked from **${interaction.guild.name}**`)
         .addFields(
-          { name: "👮 Moderator", value: interaction.user.tag, inline: true },
-          { name: "📝 Reason", value: reason, inline: false }
+          { name: "Moderator", value: interaction.user.tag, inline: true },
+          { name: "Reason", value: reason, inline: false }
         )
         .setColor(0xF26522)
         .setTimestamp();
@@ -250,17 +243,14 @@ async function kickUser(interaction) {
     await member.kick(reason);
 
     const embed = new EmbedBuilder()
-      .setTitle("👢 User Kicked")
-      .setDescription("━━━━━━━━━━━━━━━━━━━━━━━━━")
+      .setTitle("User Kicked")
       .addFields(
-        { name: "👤 User", value: `${targetUser} (${targetUser.tag})`, inline: true },
-        { name: "👮 Moderator", value: `${interaction.user}`, inline: true },
+        { name: "User", value: `${targetUser} (${targetUser.tag})`, inline: true },
+        { name: "Moderator", value: `${interaction.user}`, inline: true },
         { name: "\u200b", value: "\u200b", inline: true },
-        { name: "📝 Reason", value: reason, inline: false }
+        { name: "Reason", value: reason, inline: false }
       )
       .setColor(0xF26522)
-      .setImage("https://media.giphy.com/media/3oKHWikxKFJhjArSXm/giphy.gif") // Kick/boot GIF
-      .setAuthor({ name: "Moderation Action", iconURL: "https://cdn-icons-png.flaticon.com/512/1828/1828640.png" })
       .setFooter({ text: `User ID: ${targetUser.id}` })
       .setTimestamp();
 
@@ -309,11 +299,11 @@ async function banUser(interaction) {
     // Try to DM before banning
     try {
       const dmEmbed = new EmbedBuilder()
-        .setTitle("🔨 You Have Been Banned")
-        .setDescription(`You have been permanently banned from **${interaction.guild.name}**\n━━━━━━━━━━━━━━━━━━━━━━━━━`)
+        .setTitle("You Have Been Banned")
+        .setDescription(`You have been permanently banned from **${interaction.guild.name}**`)
         .addFields(
-          { name: "👮 Moderator", value: interaction.user.tag, inline: true },
-          { name: "📝 Reason", value: reason, inline: false }
+          { name: "Moderator", value: interaction.user.tag, inline: true },
+          { name: "Reason", value: reason, inline: false }
         )
         .setColor(0xED4245)
         .setTimestamp();
@@ -329,17 +319,14 @@ async function banUser(interaction) {
     });
 
     const embed = new EmbedBuilder()
-      .setTitle("🔨 User Banned (Hard Ban)")
-      .setDescription("━━━━━━━━━━━━━━━━━━━━━━━━━")
+      .setTitle("User Banned")
       .addFields(
-        { name: "👤 User", value: `${targetUser} (${targetUser.tag})`, inline: true },
-        { name: "👮 Moderator", value: `${interaction.user}`, inline: true },
-        { name: "🗑️ Messages Deleted", value: `${deleteMessages} day${deleteMessages !== 1 ? 's' : ''}`, inline: true },
-        { name: "📝 Reason", value: reason, inline: false }
+        { name: "User", value: `${targetUser} (${targetUser.tag})`, inline: true },
+        { name: "Moderator", value: `${interaction.user}`, inline: true },
+        { name: "Messages Deleted", value: `${deleteMessages} day${deleteMessages !== 1 ? 's' : ''}`, inline: true },
+        { name: "Reason", value: reason, inline: false }
       )
       .setColor(0xED4245)
-      .setImage("https://media.giphy.com/media/H99r2HtnYs492/giphy.gif") // Ban hammer GIF
-      .setAuthor({ name: "Moderation Action", iconURL: "https://cdn-icons-png.flaticon.com/512/1828/1828640.png" })
       .setFooter({ text: `User ID: ${targetUser.id}` })
       .setTimestamp();
 
@@ -379,17 +366,15 @@ async function softbanUser(interaction) {
     // Try to DM before soft banning
     try {
       const dmEmbed = new EmbedBuilder()
-        .setTitle("⚠️ You Have Been Soft Banned")
+        .setTitle("You Have Been Soft Banned")
         .setDescription(
-          `You have been soft banned from **${interaction.guild.name}**\n` +
-          `━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-          `This means you were kicked and your recent messages were deleted.\n` +
-          `You can rejoin using an invite link.`
+          `You have been soft banned from **${interaction.guild.name}**\n\n` +
+          `This means you were kicked and your recent messages were deleted. You can rejoin using an invite link.`
         )
         .addFields(
-          { name: "👮 Moderator", value: interaction.user.tag, inline: true },
-          { name: "🗑️ Messages Deleted", value: `${deleteMessages} day${deleteMessages !== 1 ? 's' : ''}`, inline: true },
-          { name: "📝 Reason", value: reason, inline: false }
+          { name: "Moderator", value: interaction.user.tag, inline: true },
+          { name: "Messages Deleted", value: `${deleteMessages} day${deleteMessages !== 1 ? 's' : ''}`, inline: true },
+          { name: "Reason", value: reason, inline: false }
         )
         .setColor(0xF26522)
         .setTimestamp();
@@ -409,20 +394,15 @@ async function softbanUser(interaction) {
     await interaction.guild.bans.remove(targetUser.id, `Soft ban unban: ${reason}`);
 
     const embed = new EmbedBuilder()
-      .setTitle("⚠️ User Soft Banned")
-      .setDescription(
-        `━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-        `User was kicked and their messages were deleted.\n` +
-        `They can rejoin with an invite link.`
-      )
+      .setTitle("User Soft Banned")
+      .setDescription(`User was kicked and their messages were deleted. They can rejoin with an invite link.`)
       .addFields(
-        { name: "👤 User", value: `${targetUser} (${targetUser.tag})`, inline: true },
-        { name: "👮 Moderator", value: `${interaction.user}`, inline: true },
-        { name: "🗑️ Messages Deleted", value: `${deleteMessages} day${deleteMessages !== 1 ? 's' : ''}`, inline: true },
-        { name: "📝 Reason", value: reason, inline: false }
+        { name: "User", value: `${targetUser} (${targetUser.tag})`, inline: true },
+        { name: "Moderator", value: `${interaction.user}`, inline: true },
+        { name: "Messages Deleted", value: `${deleteMessages} day${deleteMessages !== 1 ? 's' : ''}`, inline: true },
+        { name: "Reason", value: reason, inline: false }
       )
       .setColor(0xF26522)
-      .setAuthor({ name: "Moderation Action", iconURL: "https://cdn-icons-png.flaticon.com/512/1828/1828640.png" })
       .setFooter({ text: `User ID: ${targetUser.id}` })
       .setTimestamp();
 
@@ -455,16 +435,14 @@ async function unbanUser(interaction) {
     await interaction.guild.bans.remove(userId, reason);
 
     const embed = new EmbedBuilder()
-      .setTitle("✅ User Unbanned")
-      .setDescription("━━━━━━━━━━━━━━━━━━━━━━━━━")
+      .setTitle("User Unbanned")
       .addFields(
-        { name: "👤 User", value: `${bannedUser.user.tag}`, inline: true },
-        { name: "👮 Moderator", value: `${interaction.user}`, inline: true },
+        { name: "User", value: `${bannedUser.user.tag}`, inline: true },
+        { name: "Moderator", value: `${interaction.user}`, inline: true },
         { name: "\u200b", value: "\u200b", inline: true },
-        { name: "📝 Reason", value: reason, inline: false }
+        { name: "Reason", value: reason, inline: false }
       )
       .setColor(0x57F287)
-      .setAuthor({ name: "Moderation Action", iconURL: "https://cdn-icons-png.flaticon.com/512/1828/1828640.png" })
       .setFooter({ text: `User ID: ${userId}` })
       .setTimestamp();
 

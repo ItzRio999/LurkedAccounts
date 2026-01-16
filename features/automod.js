@@ -355,16 +355,13 @@ async function executeStrikeAction(message, violation, automodConfig, data, data
     // Try to DM the user
     try {
       const dmEmbed = new EmbedBuilder()
-        .setTitle("⚠️ Auto-Moderation Action")
-        .setDescription(
-          `You have received a strike in **${message.guild.name}**\n` +
-          `━━━━━━━━━━━━━━━━━━━━━━━━━`
-        )
+        .setTitle("Auto-Moderation Action")
+        .setDescription(`You have received a strike in **${message.guild.name}**`)
         .addFields(
-          { name: "📊 Strike Count", value: `${strikes}/3`, inline: true },
-          { name: "⚡ Action Taken", value: actionDescription, inline: true },
-          { name: "📝 Reason", value: violation.reason, inline: false },
-          { name: "⏰ Progressive Punishment", value:
+          { name: "Strike Count", value: `${strikes}/3`, inline: true },
+          { name: "Action Taken", value: actionDescription, inline: true },
+          { name: "Reason", value: violation.reason, inline: false },
+          { name: "Progressive Punishment", value:
             `• Strike 1: Warning + 5 min timeout\n` +
             `• Strike 2: 24 hour timeout\n` +
             `• Strike 3: Permanent ban`,
@@ -392,20 +389,17 @@ async function executeStrikeAction(message, violation, automodConfig, data, data
         };
 
         const embed = new EmbedBuilder()
-          .setTitle(`🚨 Auto-Moderation Strike System`)
-          .setDescription(`━━━━━━━━━━━━━━━━━━━━━━━━━`)
+          .setTitle(`Auto-Moderation Strike`)
           .addFields(
-            { name: "👤 User", value: `${message.author} (${message.author.tag})`, inline: true },
-            { name: "📊 Strikes", value: `${strikes}/3`, inline: true },
-            { name: "⚡ Action", value: actionDescription, inline: true },
-            { name: "📝 Violation", value: violation.type.toUpperCase(), inline: true },
-            { name: "📍 Channel", value: `${message.channel}`, inline: true },
+            { name: "User", value: `${message.author} (${message.author.tag})`, inline: true },
+            { name: "Strikes", value: `${strikes}/3`, inline: true },
+            { name: "Action", value: actionDescription, inline: true },
+            { name: "Violation", value: violation.type.toUpperCase(), inline: true },
+            { name: "Channel", value: `${message.channel}`, inline: true },
             { name: "\u200b", value: "\u200b", inline: true },
-            { name: "❓ Reason", value: violation.reason, inline: false }
+            { name: "Reason", value: violation.reason, inline: false }
           )
           .setColor(strikes === 1 ? 0xFEE75C : strikes === 2 ? 0xF26522 : 0xED4245)
-          .setImage(strikeGifs[strikes] || strikeGifs[3])
-          .setAuthor({ name: "Strike System", iconURL: "https://cdn-icons-png.flaticon.com/512/6195/6195699.png" })
           .setFooter({ text: `User ID: ${message.author.id} • Strikes reset after 30 days` })
           .setTimestamp();
 
@@ -417,7 +411,7 @@ async function executeStrikeAction(message, violation, automodConfig, data, data
             censoredContent = censoredContent.replace(regex, '[CENSORED]');
           }
           embed.addFields({
-            name: "💬 Message Content",
+            name: "Message Content",
             value: censoredContent.substring(0, 1000),
             inline: false
           });
@@ -466,23 +460,21 @@ async function executeAction(message, violation, automodConfig) {
         };
 
         const embed = new EmbedBuilder()
-          .setTitle(`${actionEmojis[action] || "⚠️"} Auto-Moderation Action`)
-          .setDescription(`━━━━━━━━━━━━━━━━━━━━━━━━━`)
+          .setTitle(`Auto-Moderation Action`)
           .addFields(
-            { name: "👤 User", value: `${message.author} (${message.author.tag})`, inline: true },
-            { name: "📝 Violation", value: violation.type.toUpperCase(), inline: true },
-            { name: "⚡ Action", value: action.toUpperCase(), inline: true },
-            { name: "📍 Channel", value: `${message.channel}`, inline: true },
-            { name: "❓ Reason", value: violation.reason, inline: true },
+            { name: "User", value: `${message.author} (${message.author.tag})`, inline: true },
+            { name: "Violation", value: violation.type.toUpperCase(), inline: true },
+            { name: "Action", value: action.toUpperCase(), inline: true },
+            { name: "Channel", value: `${message.channel}`, inline: true },
+            { name: "Reason", value: violation.reason, inline: true },
             { name: "\u200b", value: "\u200b", inline: true }
           )
           .setColor(action === "delete" ? 0xFEE75C : 0xED4245)
-          .setAuthor({ name: "Auto-Moderation System", iconURL: "https://cdn-icons-png.flaticon.com/512/6195/6195699.png" })
           .setTimestamp();
 
         if (message.content) {
           embed.addFields({
-            name: "💬 Message Content",
+            name: "Message Content",
             value: message.content.substring(0, 1000),
             inline: false
           });
@@ -591,14 +583,12 @@ async function configureAutomod(interaction, config, configPath) {
 
     const embed = new EmbedBuilder()
       .setTitle("Spam Filter Configured")
-      .setDescription("━━━━━━━━━━━━━━━━━━━━━━━━━")
       .addFields(
         { name: "Status", value: enabled ? "✅ Enabled" : "❌ Disabled", inline: true },
         { name: "Trigger", value: `${messageLimit} messages in ${timeWindow}s`, inline: true },
         { name: "Action", value: action.toUpperCase(), inline: true }
       )
       .setColor(0x57F287)
-      .setAuthor({ name: "Auto-Moderation", iconURL: "https://cdn-icons-png.flaticon.com/512/6195/6195699.png" })
       .setTimestamp();
 
     return interaction.reply({ embeds: [embed] });
@@ -618,14 +608,12 @@ async function configureAutomod(interaction, config, configPath) {
 
     const embed = new EmbedBuilder()
       .setTitle("Caps Filter Configured")
-      .setDescription("━━━━━━━━━━━━━━━━━━━━━━━━━")
       .addFields(
         { name: "Status", value: enabled ? "✅ Enabled" : "❌ Disabled", inline: true },
         { name: "Threshold", value: `${percentage}% caps`, inline: true },
         { name: "Action", value: action.toUpperCase(), inline: true }
       )
       .setColor(0x57F287)
-      .setAuthor({ name: "Auto-Moderation", iconURL: "https://cdn-icons-png.flaticon.com/512/6195/6195699.png" })
       .setTimestamp();
 
     return interaction.reply({ embeds: [embed] });
@@ -645,14 +633,12 @@ async function configureAutomod(interaction, config, configPath) {
 
     const embed = new EmbedBuilder()
       .setTitle("Link Filter Configured")
-      .setDescription("━━━━━━━━━━━━━━━━━━━━━━━━━")
       .addFields(
         { name: "Status", value: enabled ? "✅ Enabled" : "❌ Disabled", inline: true },
         { name: "Block Invites", value: blockInvites ? "✅ Yes" : "❌ No", inline: true },
         { name: "Action", value: action.toUpperCase(), inline: true }
       )
       .setColor(0x57F287)
-      .setAuthor({ name: "Auto-Moderation", iconURL: "https://cdn-icons-png.flaticon.com/512/6195/6195699.png" })
       .setTimestamp();
 
     return interaction.reply({ embeds: [embed] });
@@ -745,47 +731,46 @@ async function configureAutomod(interaction, config, configPath) {
   if (subcommand === "status") {
     const embed = new EmbedBuilder()
       .setTitle("Auto-Moderation Status")
-      .setDescription(`━━━━━━━━━━━━━━━━━━━━━━━━━\n**System:** ${automodConfig.enabled ? "✅ Enabled" : "❌ Disabled"}`)
+      .setDescription(`**System:** ${automodConfig.enabled ? "✅ Enabled" : "❌ Disabled"}`)
       .addFields(
         {
-          name: "🚫 Spam Filter",
+          name: "Spam Filter",
           value: `${automodConfig.spam.enabled ? "✅" : "❌"} ${automodConfig.spam.message_limit} msgs/${automodConfig.spam.time_window / 1000}s → ${automodConfig.spam.action}`,
           inline: true
         },
         {
-          name: "📢 Caps Filter",
+          name: "Caps Filter",
           value: `${automodConfig.caps.enabled ? "✅" : "❌"} ${automodConfig.caps.percentage}% → ${automodConfig.caps.action}`,
           inline: true
         },
         {
-          name: "🔗 Link Filter",
+          name: "Link Filter",
           value: `${automodConfig.links.enabled ? "✅" : "❌"} ${automodConfig.links.block_invites ? "Block invites" : "Allow invites"}\n→ ${automodConfig.links.action}`,
           inline: true
         },
         {
-          name: "💬 Bad Words",
+          name: "Bad Words",
           value: `${automodConfig.badwords.enabled ? "✅" : "❌"} ${automodConfig.badwords.words.length} words → ${automodConfig.badwords.action}`,
           inline: true
         },
         {
-          name: "📝 Log Channel",
+          name: "Log Channel",
           value: automodConfig.log_channel_id ? `<#${automodConfig.log_channel_id}>` : "Not set",
           inline: true
         },
         {
-          name: "🛡️ Immune Roles",
+          name: "Immune Roles",
           value: automodConfig.immune_roles.length > 0 ? automodConfig.immune_roles.map(r => `<@&${r}>`).join(", ") : "None",
           inline: true
         }
       )
       .setColor(0x5865F2)
-      .setAuthor({ name: "Auto-Moderation System", iconURL: "https://cdn-icons-png.flaticon.com/512/6195/6195699.png" })
       .setFooter({ text: "Use /automod <feature> to configure" })
       .setTimestamp();
 
     if (automodConfig.links.whitelist.length > 0) {
       embed.addFields({
-        name: "✅ Whitelisted Domains",
+        name: "Whitelisted Domains",
         value: automodConfig.links.whitelist.join(", "),
         inline: false
       });
